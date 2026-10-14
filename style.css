@@ -51,6 +51,7 @@ body{
 .boot-log{font-family:var(--mono);font-size:19px;line-height:1.35;color:#c8c8c8;white-space:pre-wrap}
 .boot-log .ok{color:#38d04a}
 .boot-log .warn{color:#e0b03a}
+.boot-log .err{color:#ff5a5a}
 .boot-log .cur{display:inline-block;width:10px;background:#c8c8c8;animation:bk 1s steps(2) infinite}
 @keyframes bk{50%{opacity:0}}
 
