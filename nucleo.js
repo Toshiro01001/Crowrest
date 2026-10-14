@@ -7,7 +7,7 @@
    ========================================================= */
 (() => {
 'use strict';
-const VERSAO = '19970521c';
+const VERSAO = '19970521d';
 const RAIZ = (typeof CRW_RAIZ === 'string' ? CRW_RAIZ : 'crowsrest').replace(/^\/+|\/+$/g, '');
 const TV = new URLSearchParams(location.search).has('tv');
 
@@ -230,7 +230,8 @@ async function conectar() {
   Rede.db = firebase.database(); Rede.auth = firebase.auth();
   try { await Rede.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION); } catch (e) {}
   Rede.db.ref('.info/connected').on('value', s => { Rede.conectado = !!s.val(); mostrarConexao(); });
-  await new Promise(ok => { const off = Rede.auth.onAuthStateChanged(u => { off(); ok(u); }); });
+  // espera o login guardado (no máximo 12 s, para nunca travar a tela de início)
+  await Promise.race([new Promise(ok => { const off = Rede.auth.onAuthStateChanged(u => { off(); ok(u); }); }), new Promise(ok => setTimeout(ok, 12000))]);
   Rede.auth.onAuthStateChanged(u => aoMudarConta(u));
   return 'firebase';
 }
@@ -806,7 +807,7 @@ const BOOT = () => [
   { t: 'Carregando SIIC.SYS ............ OK', c: 'ok' },
   { t: 'Discando para a base estadual ..', c: '', modem: true },
 ];
-async function iniciar() {
+async function iniciarInterno() {
   document.title = `SIIC · Caso ${typeof CASO !== 'undefined' ? CASO.numero : ''} · CCSO Crowsrest`;
   if (TV) document.body.classList.add('tv');
   $('#versao').textContent = 'SIIC v4.0 · ' + VERSAO;
@@ -859,6 +860,19 @@ async function iniciar() {
   const ir = ev => { if (ev.type === 'keydown' && ev.key !== 'Enter') return; document.removeEventListener('keydown', ir); $('#boot').removeEventListener('click', ir); ss.set('bootFeito', true); $('#boot').classList.add('hidden'); definirPerfil(''); mostrarLogin(); };
   if (pular) ir({ type: 'click' }); else { document.addEventListener('keydown', ir); $('#boot').addEventListener('click', ir); }
 }
+
+/* Se algo der errado na inicialização, a tela de início mostra o erro em vermelho
+   e deixa seguir para a tela de acesso (nunca fica preta e parada). */
+function bootErro(e) {
+  const log = $('#bootLog'); const b = $('#boot');
+  if (!log || !b || b.classList.contains('hidden')) return;
+  const msg = String((e && (e.message || e.reason && e.reason.message || e.reason)) || e || 'desconhecido').slice(0, 220);
+  log.insertAdjacentHTML('beforeend', `<span class="err">ERRO NA INICIALIZAÇÃO: ${esc(msg)}</span>\n<span class="warn">Toque na tela para ir à tela de acesso. Se repetir, mande uma foto desta tela.</span>\n`);
+  const ir = () => { b.removeEventListener('click', ir); document.removeEventListener('keydown', ir); b.classList.add('hidden'); try { definirPerfil(''); mostrarLogin(); } catch (er) { console.error(er); } };
+  b.addEventListener('click', ir); document.addEventListener('keydown', ir);
+}
+window.addEventListener('error', ev => bootErro(ev.error || ev.message));
+async function iniciar() { try { await iniciarInterno(); } catch (e) { console.error('inicialização:', e); bootErro(e); } }
 // o modo local lembra o Mestre só nesta aba
 on('perfil', x => { if (!Rede.fb()) ls.set('mestreLocal', !!x.mestre); });
 on('estado', () => { if (!iniciou && !$('#login').classList.contains('hidden')) { /* lista de personagens chega depois */ const sel = $('#lgPerfil'); if (sel && sel.value === 'jog' && !$('#lgPc')) desenharLogin(); } });
