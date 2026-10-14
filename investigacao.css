@@ -1,0 +1,272 @@
+/* =========================================================
+   CROWSREST · investigacao.css
+   Sala de Interrogatório (gravador e fita), Laboratório (fax),
+   Evidências e Custódia (etiqueta), Consulta às Bases (terminal)
+   e Arquivo do Condado (documentos, tarjas, microfilme e lupa).
+   Classes com prefixo iv-.
+   ========================================================= */
+.iv-h3{font-size:12px;font-weight:bold;letter-spacing:.3px;text-transform:uppercase;color:var(--w-blue);border-bottom:1px solid var(--w-shadow);padding-bottom:3px;margin:16px 0 8px}
+.iv-h4{font-size:11.5px;font-weight:bold;color:#222;margin:12px 0 6px;text-transform:uppercase;letter-spacing:.3px}
+.iv-flex{flex:1;min-width:0}
+.iv-verm{color:var(--w-red)}
+.iv-lnk{background:none;border:0;padding:0;color:var(--w-red);text-decoration:underline;cursor:pointer;font:inherit}
+.iv-mono{font-family:var(--mono);font-size:15px;line-height:1.3}
+.iv-int,.iv-int *{min-width:0}
+
+/* ---------- ficha do interrogado ---------- */
+.iv-npc{display:flex;gap:12px;align-items:flex-start;margin:4px 0 12px}
+.iv-ret{flex:none;width:92px;aspect-ratio:3/4;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));color:#fff;
+  border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.iv-ret b{font-family:var(--mono);font-size:38px;letter-spacing:2px;text-shadow:2px 2px 0 rgba(0,0,0,.35);padding-top:12px}
+.iv-ret img{width:100%;height:100%;object-fit:cover}
+.iv-ret-cab{position:absolute;top:0;left:0;right:0;background:var(--w-title);font:11px var(--mono);letter-spacing:1px;text-align:center;z-index:1}
+.iv-ret.peq{width:52px}.iv-ret.peq b{font-size:22px}
+.iv-npc-t{flex:1;min-width:0}
+.iv-npc-n{font-weight:bold;font-size:15px;margin-bottom:2px}
+.iv-rec{animation:ivPisca 1.2s steps(2) infinite}
+@keyframes ivPisca{50%{opacity:.35}}
+
+/* ---------- gravador e fita cassete ---------- */
+.iv-deck{background:linear-gradient(#3a3a3a,#232323);color:#ddd;padding:10px 12px 12px;margin:10px 0;max-width:520px;
+  border:2px solid;border-color:#666 #111 #111 #666;box-shadow:inset 0 0 0 1px #000}
+.iv-deck-topo{display:flex;justify-content:space-between;align-items:center;gap:8px;font:12px var(--mono);letter-spacing:1px;color:#aaa;margin-bottom:8px}
+.iv-cont{font:20px var(--mono);letter-spacing:4px;background:#000;color:#f2f2f2;padding:0 6px;border:2px inset #555;min-width:58px;text-align:center}
+.iv-fita{background:#1a1a1a;border:2px solid #0b0b0b;border-radius:6px;padding:8px;position:relative}
+.iv-fita-rot{background:#e9e1c9;color:#2a2418;border-radius:3px;padding:4px 8px;font:12px var(--mono);line-height:1.25;display:flex;flex-direction:column;
+  background-image:repeating-linear-gradient(#e9e1c9 0 13px,#c9bfa3 13px 14px)}
+.iv-fita-rot b{font-family:'Spectral',serif;font-style:italic;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iv-fita-jan{display:flex;align-items:center;justify-content:space-between;margin:8px auto 2px;width:78%;background:#3b2c22;border-radius:30px;padding:5px 10%;
+  border:2px solid #000;box-shadow:inset 0 2px 6px rgba(0,0,0,.8)}
+.iv-carr{width:clamp(34px,13vw,48px);aspect-ratio:1;border-radius:50%;flex:none;
+  background:radial-gradient(circle,#ddd 0 18%,transparent 19%),repeating-conic-gradient(#f4f4f4 0 14deg,#555 14deg 60deg);border:3px solid #ccc}
+.iv-fita-fio{flex:1;height:10px;margin:0 6px;background:linear-gradient(#2b1d14,#4a3426);border-radius:2px}
+.iv-deck.tocando .iv-carr{animation:ivGira 1.4s linear infinite}
+@keyframes ivGira{to{transform:rotate(-360deg)}}
+.iv-teclas{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.iv-tecla{background:linear-gradient(#d9d9d9,#a9a9a9);color:#111;font-size:16px;line-height:1.1;padding:7px 4px 5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;
+  border:2px solid;border-color:#fff #444 #444 #fff}
+.iv-tecla small{font:11px var(--mono);letter-spacing:.5px}
+.iv-tecla:active{border-color:#444 #fff #fff #444;transform:translateY(1px)}
+.iv-deck.tocando [data-f="play"]{background:linear-gradient(#a9a9a9,#cfcfcf);border-color:#444 #fff #fff #444}
+.iv-voz{color:#ccc;font-size:12px;margin-top:8px}
+
+/* ---------- transcrição ---------- */
+.iv-transc{background:#fbf8ef;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow);padding:8px 10px 10px;margin:8px 0;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.5}
+.iv-transc-cab{font:13px var(--mono);letter-spacing:1px;color:var(--w-dim);border-bottom:1px dashed #999;margin-bottom:6px;padding-bottom:2px}
+.iv-fala{display:grid;grid-template-columns:28px 1fr auto;gap:6px;align-items:start;padding:6px 0;border-bottom:1px dotted #bbb}
+.iv-fala:last-child{border-bottom:0}
+.iv-fala-n{font:15px var(--mono);color:var(--w-blue)}
+.iv-fala-t p{margin:0 0 3px;word-break:break-word}
+.iv-fala.contra{background:#fbe3e0;box-shadow:inset 3px 0 0 var(--w-red)}
+.iv-fala.marcando{background:#fff3c4;box-shadow:inset 3px 0 0 #c89b00}
+.iv-fala.nova{animation:ivNova 2.4s ease-out}
+@keyframes ivNova{0%{background:#fff27a}100%{background:transparent}}
+.iv-mk{min-width:36px;padding:2px 8px;color:var(--w-red)}
+.iv-ln{margin:0 0 4px;word-break:break-word}
+.iv-ln.sis{color:var(--w-dim);font-style:italic}
+.iv-ln.npc b{color:#5a2420}
+.iv-cursor{display:none}
+.iv-ln.agora .iv-cursor{display:inline-block;width:8px;height:1em;background:#333;vertical-align:-2px;animation:bk 1s steps(2) infinite}
+.iv-sug{margin:10px 0}
+.iv-marca{background:#fff8d8;border:2px solid #c89b00;padding:8px 10px;margin:10px 0;font-size:12.5px;position:sticky;bottom:0;z-index:2}
+.iv-contra{background:#fff;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow);border-left:4px solid var(--w-red);padding:8px 10px;margin:0 0 8px}
+.iv-contra-q{font-family:'Spectral',serif;font-style:italic;font-size:13.5px;line-height:1.45;word-break:break-word}
+.iv-contra-x{font:13px var(--mono);color:var(--w-red);letter-spacing:1px;margin:3px 0;text-transform:uppercase}
+.iv-contra-nota{font-size:12.5px;background:#fffde8;padding:4px 6px;margin:5px 0;white-space:pre-wrap}
+
+/* ---------- blocos do Mestre ---------- */
+.iv-mform{background:#fff;padding:8px 10px;margin:8px 0;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.iv-mq{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;background:#fff;padding:6px 8px;margin:0 0 5px;border-left:4px solid #7b8796}
+.iv-mq.lib{border-left-color:var(--w-green);background:#f3f8f4}
+.iv-mq.ped{border-left-color:#c89b00;background:#fffbe6}
+.iv-mq-t{flex:1 1 220px;min-width:0;font-size:12.5px;line-height:1.5;word-break:break-word}
+.iv-mq .linha95{margin:0}
+.iv-mq code{font-family:var(--mono);font-size:14px;background:#eef2f2;padding:0 4px}
+.mini-npc{margin:6px 0}
+
+/* ---------- laboratório ---------- */
+.iv-lab-it{background:#fff;padding:8px 10px;margin:0 0 8px;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow);border-left:4px solid var(--w-amber)}
+.iv-lab-it.ok{border-left-color:var(--w-green)}
+.iv-lab-it.esp{border-left-color:#888;background:#f4f4f4}
+.iv-lab-cab{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:3px}
+.iv-barra{height:8px;background:#ddd;border:1px solid #888;margin:6px 0 3px}
+.iv-barra span{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--w-title) 0 6px,#2a4fb0 6px 8px)}
+.iv-lab-cd{font:16px var(--mono);color:var(--w-blue);margin-bottom:4px}
+.iv-lab-it.ok .iv-lab-cd{color:var(--w-green)}
+
+/* ---------- fax ---------- */
+.iv-faxjan .jan-corpo{background:#bfc4c4}
+.iv-fax-maq{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#e8e3d3;border:2px solid #8d8775;border-bottom:0;padding:6px 10px;font:13px var(--mono);color:#333;border-radius:8px 8px 0 0}
+.iv-fax-luz{width:10px;height:10px;border-radius:50%;background:#39d353;box-shadow:0 0 6px #39d353;flex:none}
+.iv-fax.chegando .iv-fax-luz{animation:ivPisca .5s steps(2) 10}
+.iv-fax-boca{height:10px;background:#222;border:2px solid #8d8775;border-top:0;margin:0 0 0;box-shadow:inset 0 4px 4px #000}
+.iv-fax-jan{overflow:hidden;margin:0 14px 10px}
+.iv-fax-papel{background:#f6f3e8;background-image:linear-gradient(rgba(0,0,0,.025) 50%,transparent 50%);background-size:100% 3px;color:#2b2b2b;padding:12px 14px 16px;
+  font:12.5px/1.5 'Courier New',Courier,monospace;box-shadow:0 3px 8px rgba(0,0,0,.35);word-break:break-word}
+.iv-fax.chegando .iv-fax-papel{animation:ivImprime 4.6s steps(36) both}
+@keyframes ivImprime{from{clip-path:inset(0 0 100% 0);transform:translateY(-14px)}to{clip-path:inset(0 0 0 0);transform:none}}
+.iv-fax-linha{font-size:10.5px;color:#666;letter-spacing:.3px;border-bottom:1px dashed #aaa;padding-bottom:3px;margin-bottom:8px}
+.iv-fax-linha:last-child{border:0;border-top:1px dashed #aaa;padding-top:4px;margin:12px 0 0;text-align:center}
+.iv-fax-cab{text-align:center;font-size:12px;letter-spacing:.5px;line-height:1.35;margin-bottom:8px}
+.iv-fax-cab b{font-size:13.5px}
+.iv-fax-ref{text-align:center;font-weight:bold;letter-spacing:1px;border:1px solid #444;padding:2px;margin:6px 0 8px}
+.iv-fax-t{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+.iv-fax-t td{border:1px solid #999;padding:2px 6px;vertical-align:top}
+.iv-fax-t td:first-child{width:34%;letter-spacing:.5px}
+.iv-fax-res{border-top:2px solid #333;padding-top:6px}
+.iv-fax-res>div{margin-top:4px;opacity:.92}
+.iv-fax-ass{margin-top:18px;font-size:11px;text-align:right;color:#444}
+
+/* ---------- evidências e custódia ---------- */
+.iv-ev{background:#fff;margin:0 0 6px;border:2px solid;border-color:var(--w-light) var(--w-shadow) var(--w-shadow) var(--w-light)}
+.iv-ev>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;padding:8px 10px;align-items:baseline}
+.iv-ev>summary::-webkit-details-marker{display:none}
+.iv-ev[open]>summary{background:#e9eef0;border-bottom:1px solid #c6cdcd}
+.iv-ev-cod{font:18px var(--mono);font-weight:bold;color:var(--w-blue);white-space:nowrap}
+.iv-ev-n{font-size:12.5px;line-height:1.45;word-break:break-word}
+.iv-ev-st{grid-column:2;display:flex;flex-wrap:wrap;gap:4px}
+.iv-ev-st .etq{text-transform:none;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.iv-ev.quebra{border-left:5px solid var(--w-red)}
+.iv-ev.quebra .iv-ev-cod{color:var(--w-red)}
+.iv-ev-c{padding:8px 10px 10px}
+.iv-ev-foto{display:block;max-width:100%;max-height:220px;margin:0 0 8px;cursor:zoom-in;border:2px solid #888}
+.iv-cad{list-style:none;margin:8px 0;padding:0;border-left:3px solid var(--w-title)}
+.iv-cad li{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;padding:5px 0 5px 10px;border-bottom:1px solid #e1e5e5;position:relative;font-size:12.5px}
+.iv-cad li::before{content:'';position:absolute;left:-7px;top:10px;width:9px;height:9px;background:var(--w-title);border:1px solid #fff}
+.iv-cad li.quebra{background:#f8d7d3;color:#5a1612}
+.iv-cad li.quebra::before{background:var(--w-red)}
+.iv-cad-ts{font:14px var(--mono);color:var(--w-blue);white-space:nowrap}
+.iv-cad li.quebra .iv-cad-ts{color:var(--w-red)}
+.iv-cad-t{min-width:0;word-break:break-word}
+
+/* tela EVIDÊNCIA COLETADA e etiqueta */
+.iv-coljan .jan-corpo{background:#3a3f45;position:relative;overflow-x:hidden}
+.iv-flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:ivFlash .7s ease-out forwards;z-index:3}
+@keyframes ivFlash{0%{opacity:1}100%{opacity:0}}
+.iv-col-carimbo{text-align:center;font:30px var(--mono);letter-spacing:3px;color:#ff6a5a;border:3px solid #ff6a5a;padding:2px 8px;margin:4px auto 12px;width:max-content;max-width:100%;transform:rotate(-2deg);animation:ivCarimbo .5s .25s both}
+@keyframes ivCarimbo{from{transform:scale(2.2) rotate(-8deg);opacity:0}to{transform:rotate(-2deg);opacity:1}}
+.iv-coljan .mini{color:#ccd}
+.iv-etq{position:relative;background:#e6cf98;background-image:linear-gradient(170deg,rgba(255,255,255,.25),transparent 40%);color:#2a2214;padding:14px 14px 12px 34px;margin:0 auto 8px;max-width:400px;
+  clip-path:polygon(22px 0,100% 0,100% 100%,22px 100%,0 calc(100% - 22px),0 22px);box-shadow:0 4px 10px rgba(0,0,0,.4);animation:ivEtq .6s .35s both}
+@keyframes ivEtq{from{transform:translateY(30px) rotate(3deg);opacity:0}to{transform:none;opacity:1}}
+.iv-etq-furo{position:absolute;left:10px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:#3a3f45;box-shadow:inset 0 0 0 3px #b9a06a}
+.iv-etq-cab{font:12px var(--mono);letter-spacing:1px;border-bottom:2px solid #2a2214;padding-bottom:3px;margin-bottom:6px}
+.iv-etq-cod{font:42px var(--mono);line-height:1;color:#7a1010;letter-spacing:2px;margin:2px 0 6px}
+.iv-etq-l{display:grid;grid-template-columns:96px 1fr;gap:6px;font-size:12px;border-bottom:1px dotted #8c7650;padding:3px 0}
+.iv-etq-l span{text-transform:uppercase;font-size:10px;letter-spacing:.4px;color:#5a4a2a;padding-top:2px}
+.iv-etq-l b{font-weight:bold;word-break:break-word}
+.iv-etq-foto{display:block;max-width:100%;max-height:180px;margin:8px auto 0;border:3px solid #fff;box-shadow:1px 2px 4px rgba(0,0,0,.4);transform:rotate(-1.5deg)}
+.iv-etq-ass{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font:13px var(--mono);margin-top:8px}
+
+/* cartão do local */
+.iv-cartao{font-size:12.5px}
+.iv-cartao ul{margin:4px 0 8px 18px}
+.iv-cartao li{margin:2px 0}
+
+/* ---------- terminal das bases ---------- */
+.iv-con{max-height:min(62vh,560px);min-height:260px;overflow-y:auto;overflow-x:hidden;cursor:text;word-break:break-word;
+  background-image:repeating-linear-gradient(rgba(0,0,0,.16) 0 1px,transparent 1px 3px)}
+.iv-con::after{display:none}
+.iv-con-l{min-height:1.2em;padding-left:4ch;text-indent:-4ch}
+.iv-con-l.ok{color:#b8ffc4}
+.iv-con-l.sel{color:#ffd166;text-shadow:0 0 4px rgba(255,209,102,.5)}
+.iv-con-l.dim{color:#2f9c3e}
+.iv-con-linha{display:flex;align-items:baseline;white-space:pre}
+.iv-con-in{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#38d04a;font:inherit;text-shadow:inherit;caret-color:#38d04a;padding:0;text-transform:uppercase}
+.iv-con-bt{background:#123d1b;color:#ffd166;border:1px solid #38d04a;font:inherit;padding:2px 8px;cursor:pointer;margin:2px 0 2px 16px;min-height:32px}
+.iv-con-bt:hover{background:#1d5a29}
+.iv-atalhos{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.iv-atalhos .w95-btn{min-width:0;font-family:var(--mono);font-size:14px;padding:3px 9px}
+
+/* ---------- arquivo: documentos ---------- */
+.iv-filtros .w95-btn{min-width:0}
+.iv-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.iv-doc-card{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;background:#f1ead6;padding:10px 12px;cursor:pointer;color:#222;font-size:13px;
+  border:2px solid;border-color:var(--w-light) var(--w-shadow) var(--w-shadow) var(--w-light);box-shadow:inset 0 0 18px rgba(120,90,40,.18)}
+.iv-doc-card b{font-family:'Spectral',serif;font-size:14.5px;line-height:1.25}
+.iv-doc-card .etq{margin-right:4px}
+.iv-doc-card:hover{background:#f7f1e0}
+.iv-doc-card.t-jornal{background:#e4dcc2}
+.iv-doc-card.t-atestado,.iv-doc-card.t-obito{background:#ebe7df}
+.iv-docjan .jan-corpo{background:#59524a}
+.iv-doc-mesa{padding:4px 0 10px}
+.iv-doc{background:#f4eedb;color:#2a251a;padding:18px 20px 22px;position:relative;font-family:'Spectral',serif;font-size:14px;line-height:1.65;
+  box-shadow:0 4px 14px rgba(0,0,0,.45);background-image:radial-gradient(circle at 80% 10%,rgba(160,120,60,.14),transparent 50%),radial-gradient(circle at 10% 90%,rgba(120,90,40,.12),transparent 45%);word-break:break-word}
+.iv-doc.t-jornal{background-color:#ded4b6}
+.iv-doc.t-registro{background-color:#e9dcb8;font-style:italic}
+.iv-doc.t-atestado{background-color:#f2f0ea;font-family:'Courier New',Courier,monospace;font-size:13px;font-style:normal}
+.iv-doc.t-obito,.iv-doc.t-nascimento,.iv-doc.t-casamento{border:6px double #6d5c3a;outline:1px solid #6d5c3a;outline-offset:-14px}
+.iv-doc-mast{font-family:'UnifrakturCook',serif;font-size:34px;line-height:1;text-align:center}
+.iv-doc-slug{text-align:center;font-style:italic;font-size:12px;border-top:2px solid #211d15;border-bottom:1px solid #211d15;margin:6px 0 10px;padding:3px 0}
+.iv-doc-tit{font-size:18px;font-weight:600;line-height:1.2;margin:4px 0 8px}
+.iv-doc-ofc{text-align:center;font:12px var(--ui);letter-spacing:1px;font-style:normal;line-height:1.4;border-bottom:1px solid #6d5c3a;padding-bottom:4px}
+.iv-doc-big{text-align:center;font-size:21px;letter-spacing:3px;font-weight:600;margin:8px 0 2px;font-style:normal}
+.iv-doc-sub{text-align:center;font-size:13px;margin-bottom:10px}
+.iv-doc-sub2{font:12px var(--mono);letter-spacing:1px;text-transform:uppercase;color:#6d5c3a;font-style:normal}
+.iv-doc-img{display:block;max-width:100%;margin:6px auto 10px;border:1px solid #6d5c3a;filter:sepia(.25)}
+.iv-doc-corpo h3,.iv-doc-corpo h4{margin:8px 0 4px}
+.iv-doc-corpo hr{border:0;border-top:1px solid #6d5c3a;margin:8px 0}
+.iv-doc-selo{position:absolute;right:16px;bottom:12px;width:74px;height:74px;border-radius:50%;border:3px double rgba(120,20,20,.6);color:rgba(120,20,20,.65);
+  font:11px var(--mono);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.1;transform:rotate(-14deg);font-style:normal}
+.iv-doc.t-obito .iv-doc-corpo,.iv-doc.t-nascimento .iv-doc-corpo,.iv-doc.t-casamento .iv-doc-corpo{padding-bottom:40px}
+/* tarjas e rasuras */
+.iv-tj{display:inline-block;position:relative;vertical-align:-0.15em;height:1.15em;width:calc(var(--n,8) * .55em);max-width:100%;overflow:hidden}
+.iv-tj.tar{background:#0d0d0d;box-shadow:0 0 0 1px #0d0d0d}
+.iv-tj.ras{background:repeating-linear-gradient(-28deg,#1f2a5a 0 2px,transparent 2px 4px),repeating-linear-gradient(32deg,#1f2a5a 0 1.5px,transparent 1.5px 5px);opacity:.9}
+.iv-tj-pv{position:absolute;inset:0;color:#bbb;font-size:.8em;line-height:1.4;white-space:nowrap;overflow:hidden;padding-left:2px;font-style:normal}
+.iv-tj.rev{width:auto;height:auto;overflow:visible;background:none;box-shadow:none;vertical-align:baseline;max-width:none}
+.iv-tj.rev .iv-tj-t{background:rgba(255,230,120,.35)}
+.iv-tj.ras.rev .iv-tj-t{text-decoration:line-through wavy rgba(31,42,90,.45)}
+.iv-tj.rev.anim{animation:ivRevela 1.6s ease-out both}
+.iv-tj.rev.anim::after{content:'';position:absolute;inset:-1px 0;background:#0d0d0d;transform-origin:right;animation:ivTarjaSai 1.3s .3s ease-in forwards}
+.iv-tj.ras.rev.anim::after{background:repeating-linear-gradient(-28deg,#1f2a5a 0 2px,transparent 2px 4px)}
+@keyframes ivTarjaSai{to{transform:scaleX(0)}}
+@keyframes ivRevela{0%{filter:blur(2px)}100%{filter:none}}
+
+/* ---------- microfilme e lupa ---------- */
+.iv-mf{background:#0b0d0e;color:#cfd8d6;padding:10px;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.iv-mf.vazio{font:16px var(--mono);padding:24px 14px}
+.iv-mf.vazio .mini{color:#8a9;font-family:var(--ui)}
+.iv-mf-topo{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font:13px var(--mono);letter-spacing:1px;color:#8fb3a8;margin-bottom:8px}
+.iv-mf-rolo{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;background:#151515;padding:14px 0;position:relative;scrollbar-width:thin;
+  background-image:repeating-linear-gradient(90deg,#000 0 10px,#2a2a2a 10px 14px,#000 14px 26px),repeating-linear-gradient(90deg,#000 0 10px,#2a2a2a 10px 14px,#000 14px 26px);
+  background-size:100% 8px,100% 8px;background-repeat:repeat-x;background-position:0 3px,0 calc(100% - 3px)}
+.iv-mf-quadro{flex:0 0 100%;scroll-snap-align:center;height:min(60vh,520px);overflow-y:auto;overflow-x:hidden;position:relative;padding:0 10px;border-left:2px solid #000;border-right:2px solid #000}
+.iv-mf-doc{filter:invert(1) sepia(.35) hue-rotate(160deg) contrast(1.05);transform-origin:0 0}
+.iv-mf-doc .iv-doc{box-shadow:none}
+.iv-mf-rolo.lupa .iv-mf-quadro{touch-action:none;cursor:none}
+.iv-lente{position:absolute;width:150px;height:150px;border-radius:50%;overflow:hidden;pointer-events:none;z-index:5;background:#000;
+  border:4px solid #b9c2c0;box-shadow:0 0 0 2px #000,0 6px 18px rgba(0,0,0,.7),inset 0 0 22px rgba(0,0,0,.6)}
+.iv-lente-c{position:absolute;left:0;top:0;transform-origin:0 0}
+.iv-mf-ctl{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;margin-top:8px}
+.iv-mf-ctl .w95-btn{min-width:0}
+.iv-mf-dica{color:#9ab;margin-top:6px}
+
+/* ---------- celular ---------- */
+@media (pointer:coarse){
+  .iv-mk{min-height:36px}
+  .iv-lnk{padding:6px 2px}
+  .iv-ev>summary{min-height:44px}
+  .iv-atalhos .w95-btn{min-height:36px}
+  .iv-lente{width:170px;height:170px}
+}
+@media (max-width:860px){
+  .iv-doc{padding:14px 13px 18px;font-size:13.5px}
+  .iv-doc-mast{font-size:26px}
+  .iv-con{font-size:15px;padding:10px;max-height:56vh}
+  .iv-fax-jan{margin:0 4px 10px}
+  .iv-cad li{grid-template-columns:1fr auto}
+  .iv-cad-ts{grid-column:1}
+  .iv-cad-t{grid-column:1 / -1}
+}
+@media (max-width:400px){
+  .iv-ret{width:72px}.iv-ret b{font-size:30px}
+  .iv-deck{padding:8px}
+  .iv-deck-topo span:first-child{font-size:10.5px;letter-spacing:.3px}
+  .iv-etq{padding-left:30px}
+  .iv-etq-l{grid-template-columns:78px 1fr}
+  .iv-etq-cod{font-size:36px}
+  .iv-col-carimbo{font-size:24px}
+  .iv-docs{grid-template-columns:1fr}
+}

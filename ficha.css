@@ -1,0 +1,238 @@
+/* ============================================================
+   ficha.css · Ficha de Candela, rolador de dados, rolagens da mesa
+   e fichas de NPC (prefixo fx-)
+   ============================================================ */
+.fx .panel-h h2{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.fx [data-fx-st].fx-st-erro{color:#ffb4b4}
+.fx-bar{margin:0 0 10px}
+.fx-bar .w95-btn{min-width:0}
+.fx-sub{font-size:12px;font-weight:bold;color:var(--w-blue);margin:12px 0 6px;border-bottom:1px solid var(--w-shadow);padding-bottom:2px}
+.fx-hr{border:0;border-top:1px solid var(--w-shadow);border-bottom:1px solid var(--w-light);margin:12px 0}
+.fx-dourtx{color:#8a6400;font-weight:bold;text-shadow:0 0 1px #ffe58a}
+
+/* abas da ficha: cinco guias que cabem em 360 px */
+.fx-abas{flex-wrap:nowrap;overflow:visible}
+.fx-abas .aba95{flex:1 1 auto;padding:5px 3px 4px;min-width:0;font-size:11.5px;white-space:nowrap;text-align:center}
+.fx-abas .aba95.on{padding-bottom:6px}
+.fx-panes{background:var(--w-face);border:2px solid;border-color:var(--w-light) var(--w-dark) var(--w-dark) var(--w-light);border-top:0;padding:10px}
+.fx-pane{display:none;min-width:0}
+.fx-pane.on{display:block}
+.fx-ph{display:none;font-size:12px;color:#fff;background:linear-gradient(90deg,#404858,#7b8796);padding:4px 8px;margin:0 0 8px}
+
+/* identidade */
+.fx-idt{display:flex;gap:12px;align-items:flex-start}
+.fx-idc{flex:1;min-width:0}
+.fx-retrato{flex:none;width:100px;display:flex;flex-direction:column;gap:5px}
+.fx-retrato img,.fx-semfoto{width:100px;height:128px;object-fit:cover;display:block;background:#fff;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.fx-semfoto{display:flex;align-items:center;justify-content:center;text-align:center;font:15px/1.1 var(--mono);color:var(--w-dim);background:repeating-linear-gradient(45deg,#eef0f0 0 6px,#e2e6e6 6px 12px)}
+.fx-ret-bts{display:flex;flex-direction:column;gap:4px}
+.fx-ret-bts .w95-btn{min-width:0;width:100%;padding-left:4px;padding-right:4px}
+.fx-c{min-width:0}
+.fx-c select+input{margin-top:4px}
+.fx-v{background:#fff;color:#000;font-size:13px;padding:4px 7px;min-height:26px;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow);overflow-wrap:anywhere}
+.fx-v.longo{white-space:pre-wrap;line-height:1.5}
+.fx-item .fx-v{margin-top:4px}
+
+/* motivações e ações */
+.fx-mots{display:grid;gap:10px}
+.fx-mot{background:#fff;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow);padding:0 8px 6px}
+.fx-mot-h{font:bold 12px var(--ui);letter-spacing:.6px;text-transform:uppercase;color:#fff;background:var(--w-title);margin:0 -8px 6px;padding:3px 8px}
+.fx-imp{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12px;padding:2px 0 6px;border-bottom:1px dotted #b0b8b8;margin-bottom:4px}
+.fx-impc{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.fx-impc b,.fx-step b{font:20px/1 var(--mono);min-width:20px;text-align:center}
+.fx-num{width:56px;text-align:center}
+.w95-btn.fx-mm{min-width:0;width:30px;padding:2px 0;font-weight:bold}
+.w95-btn.fx-mm:active{padding:3px 0 1px 1px}
+.fx-acao{display:flex;align-items:center;gap:6px;padding:4px 0;flex-wrap:wrap}
+.fx-acao+.fx-acao{border-top:1px solid #eef0f0}
+.fx-an{width:82px;flex:none;font-size:13px}
+.fx-acao.dour .fx-an{color:#7a5600;font-weight:bold}
+.fx-pts{display:inline-flex;gap:4px;align-items:center}
+.fx-pt{width:22px;height:22px;border-radius:50%;padding:0;background:#fff;border:2px solid #333;box-shadow:inset 1px 1px 0 #999;cursor:pointer;display:inline-block}
+.fx-pt.on{background:radial-gradient(circle at 35% 35%,#4a5e9e,#000080 70%);border-color:#000}
+i.fx-pt{cursor:default}
+.fx-dour{width:30px;height:30px;padding:0;font-size:19px;line-height:1;background:none;border:1px solid transparent;color:#9a9a9a;cursor:pointer}
+.fx-dour.on{color:#c99700;text-shadow:0 0 2px #7a5600}
+span.fx-dour{cursor:default}
+.w95-btn.fx-rolar{min-width:0;margin-left:auto;padding-left:9px;padding-right:9px}
+.fx-maxl label{display:inline-flex;align-items:center;gap:6px}
+
+/* marcas, cicatrizes, iluminação */
+.fx-marcas{display:grid;gap:6px}
+.fx-marca{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;padding:5px 8px;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.fx-mn{width:70px;flex:none;font-weight:bold;font-size:13px}
+.fx-mv{font:16px var(--mono);color:var(--w-dim)}
+.fx-cxs{display:inline-flex;gap:5px;flex-wrap:wrap;align-items:center}
+.fx-cx{width:24px;height:24px;padding:0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font:13px/1 var(--mono);
+  border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow);box-shadow:inset 1px 1px 0 #000}
+.fx-cx.on{background:#3a3a3a}
+.fx-cx.on::after{content:'✕';color:#fff;font-size:15px}
+i.fx-cx{cursor:default}
+.fx-cx4{width:auto;min-width:34px;padding:0 5px;background:#fbeaea;color:var(--w-red);border-style:dashed;border-color:var(--w-red);box-shadow:none;font-size:15px}
+.fx-marca[data-marca-l="sangria"] .fx-cx.on{background:#7a0e0e}
+.fx-cics{list-style:none;display:grid;gap:5px}
+.fx-cics li{background:#fff8e6;padding:5px 8px;border-left:4px solid var(--w-red);display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap}
+.fx-cict{flex:1;min-width:140px;white-space:pre-wrap;font-size:13px}
+.fx-x{background:none;border:0;color:var(--w-red);font-size:15px;cursor:pointer;min-width:30px;min-height:28px;margin-left:auto}
+.fx-ilum{background:#fff;padding:6px 8px;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.fx-ilum-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.fx-ilum-cx .fx-cx.on{background:#e7b923;box-shadow:inset 1px 1px 0 #6b4b00}
+.fx-ilum-cx .fx-cx.on::after{content:'☼';color:#3a2600}
+
+/* listas (habilidades, equipamento) */
+.fx-lista{display:grid;gap:6px}
+.fx-item{background:#fff;padding:6px 8px;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow);min-width:0}
+.fx-item textarea{width:100%;margin-top:4px}
+.fx-item .etq{margin-top:4px}
+.fx-itl{display:flex;gap:5px;align-items:center}
+.fx-itl input:first-child{flex:1;min-width:0}
+.fx-itl .fx-x{margin-left:0}
+
+/* leitura (Mestre e auxiliares) */
+.fx-ro .fx-mot,.fx-ro .fx-marca,.fx-ro .fx-ilum{background:#f8f8f4}
+
+/* fichas de todos (Mestre) */
+.fx-resumo{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin:8px 0}
+.fx-rc{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:#fff;padding:6px 8px;cursor:pointer;font-family:var(--ui);font-size:12.5px;color:#000;min-width:0;
+  border:2px solid;border-color:var(--w-light) var(--w-dark) var(--w-dark) var(--w-light)}
+.fx-rc b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fx-rc.on{outline:2px solid var(--w-title);outline-offset:-5px;background:#eef3ff}
+.fx-rc.vazio{cursor:default;opacity:.7;border-style:dashed;border-color:#888}
+.fx-rcm{display:flex;gap:8px;font:14px var(--mono);flex-wrap:wrap}
+.fx-fmsel select{flex:1;min-width:0;max-width:100%}
+.fx-fmsel .w95-btn{min-width:0}
+
+/* ---------- dados (d6 com pontos quadrados, estilo anos 90) ---------- */
+.fx-d{--s:42px;position:relative;width:var(--s);height:var(--s);display:inline-grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  padding:calc(var(--s) * .13);background:#fff;vertical-align:middle;flex:none;
+  border:2px solid;border-color:#fff #000 #000 #fff;box-shadow:inset -2px -2px 0 #9a9a9a,inset 2px 2px 0 #f0f0f0}
+.fx-d i{display:block;place-self:center;width:calc(var(--s) * .17);height:calc(var(--s) * .17);background:#111;visibility:hidden}
+.fx-d[data-v="1"] i:nth-child(5){background:#b00000;width:calc(var(--s) * .24);height:calc(var(--s) * .24)}
+.fx-d[data-v="1"] i:nth-child(5),
+.fx-d[data-v="2"] i:nth-child(3),.fx-d[data-v="2"] i:nth-child(7),
+.fx-d[data-v="3"] i:nth-child(3),.fx-d[data-v="3"] i:nth-child(5),.fx-d[data-v="3"] i:nth-child(7),
+.fx-d[data-v="4"] i:nth-child(1),.fx-d[data-v="4"] i:nth-child(3),.fx-d[data-v="4"] i:nth-child(7),.fx-d[data-v="4"] i:nth-child(9),
+.fx-d[data-v="5"] i:nth-child(1),.fx-d[data-v="5"] i:nth-child(3),.fx-d[data-v="5"] i:nth-child(5),.fx-d[data-v="5"] i:nth-child(7),.fx-d[data-v="5"] i:nth-child(9),
+.fx-d[data-v="6"] i:nth-child(1),.fx-d[data-v="6"] i:nth-child(3),.fx-d[data-v="6"] i:nth-child(4),.fx-d[data-v="6"] i:nth-child(6),.fx-d[data-v="6"] i:nth-child(7),.fx-d[data-v="6"] i:nth-child(9){visibility:visible}
+/* o dado dourado: ouro, borda de latão e uma estrela no canto */
+.fx-d.dour{background:linear-gradient(135deg,#fff4b8 0%,#f2cf4a 45%,#c99700 100%);border-color:#fff2a8 #5a3f00 #5a3f00 #fff2a8;box-shadow:inset -2px -2px 0 #9a7000,inset 2px 2px 0 #fff8d0,0 0 6px rgba(240,190,40,.8)}
+.fx-d.dour i{background:#3a2600}
+.fx-d.dour::after{content:'★';position:absolute;top:-1px;right:1px;font-size:calc(var(--s) * .24);line-height:1;color:#7a5600}
+.fx-d.rola{animation:fxSacode .16s steps(2) infinite}
+@keyframes fxSacode{0%{transform:translate(-2px,1px) rotate(-9deg)}100%{transform:translate(2px,-2px) rotate(9deg)}}
+.fx-d.vale{outline:3px solid #000080;outline-offset:2px}
+.fx-d.fora{opacity:.5}
+.fx-d.dour.fora{opacity:.7}
+.fx-dados{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fx-dados.mini{gap:4px}
+.fx-dados.mini .fx-d{--s:20px;padding:2px;border-width:1px;box-shadow:none}
+.fx-dados.mini .fx-d.vale{outline-width:2px;outline-offset:1px}
+.fx-dados.mini .fx-d.dour::after{display:none}
+
+/* ---------- janela do rolador ---------- */
+.fx-rol .campo select{width:100%}
+.fx-rl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px 0;border-bottom:1px dotted #a8b0b0;font-size:12.5px}
+.fx-rl>span:first-child{flex:1;min-width:120px}
+.fx-rl[hidden]{display:none}
+.fx-step{display:inline-flex;align-items:center;gap:6px}
+.fx-recuo{margin-left:22px;font-size:11.5px}
+.fx-recuo[hidden]{display:none}
+.fx-total{font-size:13px;margin:8px 0;padding:5px 8px;background:#fff;border:1px solid #888}
+.w95-btn.fx-rolarbtn{display:block;width:100%;font:22px/1.2 var(--mono);letter-spacing:4px;padding:8px}
+.w95-btn.fx-rolarbtn:disabled{color:var(--w-shadow)}
+.fx-mesa{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;min-height:70px;margin:12px 0 6px;padding:10px;
+  background:#0d4a2a radial-gradient(circle at 50% 30%,#1c7046,#0b3d22);border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.fx-mesa .fx-d{--s:46px}
+.fx-mesa .fx-d.vale{outline-color:#ffe36a}
+.fx-rres{text-align:center;min-height:20px}
+.fx-rt{font:34px/1.1 var(--mono);letter-spacing:3px}
+.fx-regra{margin-top:10px}
+.res-critico .fx-rt,.fx-rt.res-critico,.res-critico .fx-fr{color:#000080;text-shadow:0 0 6px #ffd84a}
+.fx-rt.res-sucesso,.res-sucesso .fx-fr{color:var(--w-green)}
+.fx-rt.res-parcial,.res-parcial .fx-fr{color:var(--w-amber)}
+.fx-rt.res-falha,.res-falha .fx-fr{color:var(--w-red)}
+.etq.fx-etq-critico{background:#000080;color:#ffe36a;border-color:#000}
+.etq.fx-etq-sucesso{background:#cce8d4;color:var(--w-green)}
+.etq.fx-etq-parcial{background:#f0e4b8;color:var(--w-amber)}
+.etq.fx-etq-falha{background:#f3dad7;color:var(--w-red)}
+
+/* ---------- faixa da rolagem pública (todos veem) ---------- */
+.fx-faixa{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:955;width:min(460px,calc(100vw - 16px));background:var(--w-face);
+  border:2px solid;border-color:var(--w-light) var(--w-dark) var(--w-dark) var(--w-light);box-shadow:3px 3px 0 rgba(0,0,0,.45);padding:6px 8px 6px;text-align:center;cursor:pointer;
+  animation:fxEntra .18s steps(3)}
+.fx-faixa[hidden]{display:none}
+@keyframes fxEntra{from{transform:translate(-50%,-30px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.fx-faixa .fx-ft{background:linear-gradient(90deg,var(--w-title),var(--w-title2));color:#fff;margin:-4px -6px 8px;padding:3px 8px;font-size:12.5px;text-align:left;overflow-wrap:anywhere}
+.fx-fd{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.fx-fr{font:30px/1.1 var(--mono);letter-spacing:3px;margin-top:6px}
+.fx-fx{font-size:10.5px;color:var(--w-dim)}
+.fx-holo{display:inline-block;background:#ffd84a;color:#000;padding:0 6px;font-weight:bold;margin-right:4px}
+.fx-faixa.holofote{box-shadow:0 0 0 4px #ffd84a,0 0 40px 12px rgba(255,216,74,.75);animation:fxEntra .18s steps(3),fxHolo 1.2s ease-in-out 2}
+@keyframes fxHolo{50%{box-shadow:0 0 0 6px #fff3a0,0 0 70px 24px rgba(255,216,74,.95)}}
+
+/* ---------- rolagens da mesa ---------- */
+.fx-ult{background:#fff;padding:8px 10px;text-align:center;border:2px solid;border-color:var(--w-shadow) var(--w-light) var(--w-light) var(--w-shadow)}
+.fx-ult .fx-ft{text-align:left;font-size:13px;margin-bottom:8px;overflow-wrap:anywhere}
+.fx-ult.holofote{box-shadow:0 0 0 3px #ffd84a}
+.fx-hist{list-style:none;display:grid;gap:4px}
+.fx-hl{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap;background:#fff;padding:5px 8px;border-left:4px solid #888;font-size:12.5px}
+.fx-hl.res-critico{border-left-color:#000080}.fx-hl.res-sucesso{border-left-color:var(--w-green)}.fx-hl.res-parcial{border-left-color:#c9a000}.fx-hl.res-falha{border-left-color:var(--w-red)}
+.fx-hl.holofote{background:#fffbe0}
+.fx-hts{font:14px var(--mono);color:var(--w-blue);flex:none}
+.fx-hq{flex:1 1 140px;min-width:0;overflow-wrap:anywhere}
+.w95-btn.fx-holob{min-width:0;padding:2px 8px;font-size:11.5px}
+
+/* ---------- NPCs (painel do Mestre) ---------- */
+.fx-npcs{display:grid;gap:4px;margin:6px 0}
+.fx-npc{display:flex;align-items:center;gap:8px;background:#fff;padding:5px 8px;flex-wrap:wrap;border:1px solid #b8c0c0}
+.fx-cor{width:14px;height:14px;flex:none;border:1px solid #000;display:inline-block}
+.fx-npcn{flex:1 1 150px;min-width:0;display:flex;flex-direction:column}
+.fx-npcb{display:flex;gap:5px;margin-left:auto}
+.fx-npcb .w95-btn{min-width:0}
+.fx-npch{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;font-size:14px}
+.fx-npcf .grade2{margin-top:8px}
+
+/* código da ficha */
+.fx-cod{flex:1;min-width:0;font:16px var(--mono)!important;letter-spacing:.5px}
+
+/* ---------- toque ---------- */
+@media (pointer:coarse){
+  .fx-pt{width:32px;height:32px}
+  .fx-pts{gap:5px}
+  .fx-dour{width:38px;height:38px;font-size:22px}
+  .fx-cx{width:36px;height:36px}
+  .fx-cx.on::after{font-size:20px}
+  .fx-cx4{min-width:44px}
+  .w95-btn.fx-mm{width:38px}
+  .fx-abas .aba95{min-height:38px}
+  .fx-x{min-width:38px;min-height:38px}
+  .fx-rc{min-height:44px}
+}
+/* telas estreitas */
+@media (max-width:420px){
+  .fx-panes{padding:8px 6px}
+  .fx-an{width:72px;font-size:12.5px}
+  .fx-retrato{width:84px}
+  .fx-retrato img,.fx-semfoto{width:84px;height:108px}
+  .fx-mesa .fx-d{--s:40px}
+  .fx-faixa .fx-d{--s:36px}
+  .fx-abas .aba95{font-size:11px;padding-left:2px;padding-right:2px}
+}
+@media (max-width:370px){
+  .fx-an{width:64px}
+  .fx-mn{width:58px}
+  .fx-pts{gap:3px}
+  .fx-acao{gap:4px}
+  .w95-btn.fx-rolar{padding-left:6px;padding-right:6px}
+}
+/* computador de tela larga: tudo lado a lado, sem abas */
+@media (min-width:1100px){
+  .fx-abas{display:none}
+  .fx-panes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;border-top:2px solid var(--w-light)}
+  .fx-pane{display:block}
+  .fx-pane[data-pane="id"]{grid-column:1 / -1}
+  .fx-ph{display:block}
+}
+/* na leitura, os valores parecem texto de formulário, não campos para digitar */
+.fx-ro .fx-v{background:transparent;border:0;border-bottom:1px dotted #7a8484;padding:2px 0 3px;min-height:0}
+.fx-ro .fx-item .fx-v{border-bottom:0}
