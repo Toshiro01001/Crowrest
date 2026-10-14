@@ -7,7 +7,7 @@
    ========================================================= */
 (() => {
 'use strict';
-const VERSAO = '19970521a';
+const VERSAO = '19970521c';
 const RAIZ = (typeof CRW_RAIZ === 'string' ? CRW_RAIZ : 'crowsrest').replace(/^\/+|\/+$/g, '');
 const TV = new URLSearchParams(location.search).has('tv');
 
@@ -236,9 +236,13 @@ async function conectar() {
 }
 function contaAtual() { return Rede.fb() ? Rede.auth.currentUser : null; }
 const EMAIL_AUX = (typeof CRW_EMAIL_AUX === 'string' ? CRW_EMAIL_AUX : 'auxiliares@crowsrest.com').toLowerCase();
+const UID_MESTRE = typeof CRW_UID_MESTRE === 'string' ? CRW_UID_MESTRE : '';
+const AUX_LIGADOS = typeof CRW_AUXILIARES === 'undefined' ? true : !!CRW_AUXILIARES;
 function tipoConta(u) {
   if (!u || u.isAnonymous) return 'anon';
-  return (u.email || '').toLowerCase() === EMAIL_AUX ? 'aux' : 'mestre';
+  if (AUX_LIGADOS && (u.email || '').toLowerCase() === EMAIL_AUX) return 'aux';
+  // só a conta do Guardião (pelo UID) é Mestre; qualquer outra conta de e-mail não tem papel
+  return !UID_MESTRE || u.uid === UID_MESTRE ? 'mestre' : 'outra';
 }
 function aoMudarConta(u) {
   const t = tipoConta(u), pf = lerPerfil();
@@ -724,16 +728,17 @@ function mostrarLogin() {
 function desenharLogin() {
   const corpo = $('#loginCorpo'); if (!corpo) return;
   const lista = pcs();
-  const modo = ss.get('loginModo', 'jog');
+  let modo = ss.get('loginModo', 'jog'); if (modo === 'aux' && !AUX_LIGADOS) modo = 'jog';
   corpo.innerHTML = `
     <div class="lf-row"><label>Perfil:</label><select id="lgPerfil" class="w95-input">
       <option value="jog"${modo === 'jog' ? ' selected' : ''}>Investigador (jogador)</option>
-      <option value="aux"${modo === 'aux' ? ' selected' : ''}>Mestre Auxiliar</option>
+      ${AUX_LIGADOS ? `<option value="aux"${modo === 'aux' ? ' selected' : ''}>Mestre Auxiliar</option>` : ''}
       <option value="mestre"${modo === 'mestre' ? ' selected' : ''}>Guardião da Luz (Mestre)</option></select></div>
     <div id="lgCampos"></div>
     <p class="lg-erro" id="lgErro" hidden></p>
     <div class="lf-actions"><button class="w95-btn" id="loginBtn">Entrar</button><button class="w95-btn" id="loginCancel">Cancelar</button></div>
-    <p class="lg-mini">${Rede.fb() ? 'Conectado à base estadual.' : 'Modo local: sem internet, tudo fica neste navegador.'}</p>`;
+    <p class="lg-mini">${Rede.fb() ? 'Conectado à base estadual.' : 'Modo local: sem internet, tudo fica neste navegador.'}</p>
+    ${Rede.negado ? '<p class="lg-erro">O servidor recusou a leitura do Crowsrest. As regras do Firebase ainda não têm o bloco "crowsrest": o Guardião precisa publicar o arquivo regras-firebase-crowsrest.json no console do Firebase do projeto crowsrest-ab58b (Realtime Database, Regras) e recarregar a página.</p>' : ''}`;
   const campos = () => {
     const m = $('#lgPerfil').value; ss.set('loginModo', m);
     const c = $('#lgCampos');
@@ -826,7 +831,18 @@ async function iniciar() {
   const modo = await conexao;
   linha(modo === 'firebase' ? 'Conectado a 28.8 Kbps .......... OK' : 'Sem linha: MODO LOCAL ........ OK', modo === 'firebase' ? 'ok' : 'warn');
   // estado público
-  await new Promise(ok => { let primeiro = true; Rede.on('estado', x => { Estado.pub = x || {}; Estado.compor(); emit('estado', Estado.s); if (primeiro) { primeiro = false; ok(); } }); });
+  // estado público: se o servidor recusar (regras sem o bloco "crowsrest") ou demorar, avisa em vez de travar
+  const leitura = await new Promise(ok => {
+    let primeiro = true; const fim = r => { if (primeiro) { primeiro = false; clearTimeout(t); ok(r); } };
+    const t = setTimeout(() => fim('lento'), 15000);
+    Rede.on('estado', x => { Estado.pub = x || {}; Estado.compor(); emit('estado', Estado.s); fim('ok'); }, e => { console.warn('leitura estado:', e && e.message); fim('negado'); });
+  });
+  Rede.negado = leitura === 'negado';
+  if (leitura === 'negado') {
+    linha('ERRO: a base estadual RECUSOU o acesso.', 'err');
+    linha('  Guardião: publique no Firebase as regras com o bloco "crowsrest"', 'warn');
+    linha('  (arquivo regras-firebase-crowsrest.json) e recarregue.', 'warn');
+  } else if (leitura === 'lento') linha('AVISO: a base estadual não respondeu. Seguindo assim mesmo.', 'warn');
   linha('Verificando integridade do caso ' + (typeof CASO !== 'undefined' ? CASO.numero : '') + ' ...', '');
   linha('  AVISO: 4 anexos ausentes, 1 laudo alterado', 'warn');
   linha('  AVISO: acesso selado detectado no histórico', 'warn');
@@ -839,7 +855,7 @@ async function iniciar() {
   else if (pf.startsWith('jog:')) ok = !!pc(pf.slice(4));
   if (TV) { definirPerfil(''); entrarNoApp(); abrirModulo('mapa', true); return; }
   if (ok) { definirPerfil(pf); ss.set('bootFeito', true); $('#boot').classList.add('hidden'); entrarNoApp(); return; }
-  linha('', ''); linha('Pressione ENTER para acessar o sistema_', '');
+  linha('', ''); linha('Toque na tela ou pressione ENTER para acessar o sistema_', '');
   const ir = ev => { if (ev.type === 'keydown' && ev.key !== 'Enter') return; document.removeEventListener('keydown', ir); $('#boot').removeEventListener('click', ir); ss.set('bootFeito', true); $('#boot').classList.add('hidden'); definirPerfil(''); mostrarLogin(); };
   if (pular) ir({ type: 'click' }); else { document.addEventListener('keydown', ir); $('#boot').addEventListener('click', ir); }
 }
