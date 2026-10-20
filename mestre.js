@@ -66,7 +66,7 @@ function editarPC(id) {
     let nid = id || slug(nome); if (!id && CRW.pc(nid)) nid += Date.now().toString(36).slice(-3);
     const dado = { nome, jogador: g('jogador'), cor: g('cor'), papel: g('papel'), esp: g('esp'), foto: foto || null, ordem: id ? (p.ordem || 0) : CRW.pcs().length + 1 };
     Estado.definir(['pcs', nid], dado);
-    if (!id) { const pos = posInicial(CRW.pcs().length); Estado.definir(['tokens', nid], { id: nid, tipo: 'pc', loc: 'c', x: pos.x, y: pos.y }); }
+    if (!id) { const pos = posInicial(CRW.pcs().length); Estado.definir(['tokens', nid], { id: nid, tipo: 'pc', loc: 'c', reg: pos.reg || 'centro', x: pos.x, y: pos.y }); }
     CRW.diario('mesa', (id ? 'Investigador editado: ' : 'Investigador cadastrado: ') + nome);
     fecharJanela(w.parentElement.dataset.jan);
   });
@@ -208,7 +208,7 @@ async function restaurarSite() {
       if (r.fazer) { try { await r.fazer(); } catch (er) {} }
     }
     // peças dos investigadores voltam para a frente da delegacia
-    if (marcados.some(r => r.id === 'mapa')) CRW.pcs().forEach((p, i) => { const pos = posInicial(i); Estado.definir(['tokens', p.id], { id: p.id, tipo: 'pc', loc: 'c', x: pos.x, y: pos.y }); });
+    if (marcados.some(r => r.id === 'mapa')) CRW.pcs().forEach((p, i) => { const pos = posInicial(i); Estado.definir(['tokens', p.id], { id: p.id, tipo: 'pc', loc: 'c', reg: pos.reg || 'centro', x: pos.x, y: pos.y }); });
     Estado.definir(['restauracao'], { ts: Date.now(), itens: marcados.map(r => r.id) });
     fecharJanela(w.parentElement.dataset.jan);
     aviso('Site restaurado. O backup foi baixado.');

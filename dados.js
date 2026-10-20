@@ -8,48 +8,116 @@
    ========================================================= */
 
 /* ---------- A CIDADE ----------
-   Unidade do mapa: 1 = 25 metros. A cidade inteira cabe em 64 x 64 (1,6 km).
-   Norte para cima. */
+   Crowsrest é dividida em 4 REGIÕES, cada uma com o seu próprio mapa (como os andares da Planta da Caixa).
+   Cada região tem a sua escala: "metros" = quantos metros vale 1 quadradinho; "lado" = quantos quadradinhos
+   tem o mapa. Norte para cima. Os prédios das regiões de fora ficam um pouco maiores que o real para dar
+   para tocar neles; as DISTÂNCIAS (régua, viagens) usam a escala certa.
+   portais: onde uma estrada sai do mapa para outra região. ligacoes: a estrada entre dois portais (km).
+   saidas: as saídas do condado (podem virar bloqueio policial). */
 const CIDADE = {
   nome: 'Crowsrest',
   estado: 'West Virginia',
   fundada: 1723,
-  lado: 64,
-  metros: 25,
-  rio: { nome: 'Rio Mill', largura: 3.2, pts: [[-2, 46], [12, 45], [22, 47], [34, 48], [46, 51], [58, 52], [66, 53]] },
-  ruas: [
-    { id: 'hollow', nome: 'Rodovia Hollow Mill', classe: 'rodovia', largura: 2.4, pts: [[-2, 14], [14, 17], [24, 20], [44, 20], [56, 22], [66, 24]] },
-    { id: 'principal', nome: 'Rua Principal (Main St.)', classe: 'av', largura: 1.8, pts: [[24, 1], [24, 46]] },
-    { id: 'vale', nome: 'Estrada do Vale', classe: 'rodovia', largura: 2.2, pts: [[24, 46], [25, 56], [28, 66]] },
-    { id: 'cinder', nome: 'Avenida Cinder', classe: 'av', largura: 1.8, pts: [[40, 1], [40, 50]] },
-    { id: 'kettle', nome: 'Rua Kettle', classe: 'rua', largura: 1.3, pts: [[12, 8], [54, 8]] },
-    { id: 'elm', nome: 'Rua Elm', classe: 'rua', largura: 1.3, pts: [[4, 29], [40, 29]] },
-    { id: 'harrow', nome: 'Rua Harrow', classe: 'rua', largura: 1.3, pts: [[24, 36], [58, 36]] },
-    { id: 'pulp', nome: 'Rua Pulp', classe: 'rua', largura: 1.3, pts: [[0, 38], [24, 38]] },
-    { id: 'beco', nome: 'Beco do Necrotério', classe: 'beco', largura: 0.9, pts: [[32, 29], [32, 36]] },
-    { id: 'fundicao', nome: 'Estrada da Fundição', classe: 'rua', largura: 1.4, pts: [[44, 20], [48, 14], [52, 8], [56, -2]] },
-    { id: 'cais', nome: 'Rua do Cais', classe: 'rua', largura: 1.1, pts: [[40, 47], [47, 48.6]] },
-    { id: 'mina', nome: 'Trilha da Mina Velha', classe: 'trilha', largura: 0.8, pts: [[25, 56], [12, 57], [6, 60]] },
+  // médias de deslocamento (km/h). A distância pela estrada é a linha reta x fatorEstrada.
+  velocidade: { pe: 4.5, carro: 50 },
+  fatorEstrada: 1.3,
+  regioes: [
+    { id: 'centro', num: 1, nome: 'Centro', sub: 'Centro Histórico, Pulptown e Margem do Mill', lado: 64, metros: 25, urbano: true,
+      rio: { nome: 'Rio Mill', largura: 3.2, pts: [[-2, 46], [12, 45], [22, 47], [34, 48], [46, 51], [58, 52], [66, 53]] },
+      ruas: [
+        { id: 'hollow', nome: 'Rodovia Hollow Mill', classe: 'rodovia', largura: 2.4, pts: [[-2, 14], [14, 17], [24, 20], [44, 20], [56, 22], [66, 24]] },
+        { id: 'principal', nome: 'Rua Principal (Main St.)', classe: 'av', largura: 1.8, pts: [[24, -2], [24, 46]] },
+        { id: 'vale', nome: 'Estrada do Vale', classe: 'rodovia', largura: 2.2, pts: [[24, 46], [25, 56], [28, 66]] },
+        { id: 'cinder', nome: 'Avenida Cinder', classe: 'av', largura: 1.8, pts: [[40, 1], [40, 50]] },
+        { id: 'kettle', nome: 'Rua Kettle', classe: 'rua', largura: 1.3, pts: [[12, 8], [54, 8]] },
+        { id: 'elm', nome: 'Rua Elm', classe: 'rua', largura: 1.3, pts: [[4, 29], [40, 29]] },
+        { id: 'harrow', nome: 'Rua Harrow', classe: 'rua', largura: 1.3, pts: [[24, 36], [58, 36]] },
+        { id: 'pulp', nome: 'Rua Pulp', classe: 'rua', largura: 1.3, pts: [[0, 38], [24, 38]] },
+        { id: 'beco', nome: 'Beco do Necrotério', classe: 'beco', largura: 0.9, pts: [[32, 29], [32, 36]] },
+        { id: 'cais', nome: 'Rua do Cais', classe: 'rua', largura: 1.1, pts: [[40, 47], [47, 48.6]] },
+      ],
+      pontes: [
+        { nome: 'Ponte da Rua Principal', x: 24, y: 46.6, ang: 90 },
+        { nome: 'Ponte da Avenida Cinder', x: 40, y: 48.6, ang: 90 },
+      ],
+      bairros: [
+        { id: 'centro', nome: 'Centro Histórico', x: 18, y: 9, w: 22, h: 27, som: 'centro' },
+        { id: 'kettle', nome: 'Rua Kettle (pé da Colina)', x: 0, y: 0, w: 40, h: 9, som: 'vento' },
+        { id: 'cinder', nome: 'Avenida Cinder', x: 41, y: 0, w: 23, h: 24, som: 'fabrica' },
+        { id: 'pulptown', nome: 'Pulptown', x: 0, y: 9, w: 18, h: 36, som: 'pulptown' },
+        { id: 'margem', nome: 'Margem do Mill', x: 25, y: 36, w: 39, h: 14, som: 'rio' },
+        { id: 'vale', nome: 'Margem sul do Mill', x: 0, y: 48, w: 64, h: 16, som: 'mata', mata: true },
+      ],
+      portais: [
+        { id: 'c-norte', nome: 'Rua Principal, rumo à Colina de Kettle', x: 24, y: 0.6 },
+        { id: 'c-leste', nome: 'Rodovia Hollow Mill, rumo ao Distrito da Fundição', x: 63.4, y: 23.8 },
+        { id: 'c-sul', nome: 'Estrada do Vale, rumo ao Vale Sul', x: 27.6, y: 63.4 },
+      ],
+      saidas: [
+        { id: 'oeste', nome: 'Saída Oeste (Hollow Mill)', x: 0.5, y: 14.5 },
+      ] },
+    { id: 'kettle', num: 2, nome: 'Colina de Kettle', sub: 'Torre d\'água, Alameda da Colina e o Mirante', lado: 96, metros: 60,
+      ruas: [
+        { id: 'colina', nome: 'Estrada da Colina', classe: 'rodovia', largura: 1.6, pts: [[48, 98], [50, 82], [54, 68], [46, 52], [38, 36], [26, 22], [14, 10], [8, 6]] },
+        { id: 'kettle', nome: 'Rua Kettle (alto)', classe: 'rua', largura: 1.2, pts: [[10, 72], [30, 70], [54, 68], [76, 62], [98, 56]] },
+        { id: 'alameda', nome: 'Alameda da Colina', classe: 'rua', largura: 1.1, pts: [[46, 52], [60, 44], [70, 34], [74, 25]] },
+      ],
+      pontes: [],
+      bairros: [
+        { id: 'kettle', nome: 'Colina de Kettle', x: 0, y: 0, w: 96, h: 96, som: 'vento', mata: true },
+      ],
+      portais: [
+        { id: 'k-sul', nome: 'Estrada da Colina, rumo ao Centro', x: 48, y: 95.4 },
+        { id: 'k-leste', nome: 'Rua Kettle, rumo ao Distrito da Fundição', x: 95.4, y: 56.4 },
+      ],
+      saidas: [] },
+    { id: 'fundicao', num: 3, nome: 'Distrito da Fundição', sub: 'Rodovia Hollow Mill, depósitos e a Fundição', lado: 128, metros: 75,
+      rio: { nome: 'Rio Mill', largura: 3, pts: [[-2, 108], [40, 110], [80, 114], [130, 118]] },
+      ruas: [
+        { id: 'hollow', nome: 'Rodovia Hollow Mill', classe: 'rodovia', largura: 1.8, pts: [[-2, 84], [20, 83], [40, 78], [60, 72], [90, 76], [130, 86]] },
+        { id: 'fundicao', nome: 'Estrada da Fundição', classe: 'rodovia', largura: 1.5, pts: [[60, 72], [62, 56], [66, 40], [72, 22], [78, -2]] },
+        { id: 'kettle', nome: 'Rua Kettle', classe: 'rua', largura: 1.1, pts: [[-2, 30], [20, 32], [40, 38], [65, 47]] },
+        { id: 'trilha', nome: 'Trilha (sem nome)', classe: 'trilha', largura: 0.6, pts: [[33, 80], [38, 75], [46, 72], [52, 72]] },
+      ],
+      pontes: [],
+      bairros: [
+        { id: 'fundicao', nome: 'Distrito da Fundição', x: 40, y: 0, w: 88, h: 70, som: 'fabrica' },
+        { id: 'colina', nome: 'Encosta da Colina de Kettle', x: 0, y: 0, w: 40, h: 70, som: 'vento', mata: true },
+        { id: 'hollow', nome: 'Rodovia Hollow Mill', x: 0, y: 70, w: 128, h: 58, som: 'mata', mata: true },
+      ],
+      portais: [
+        { id: 'f-oeste', nome: 'Rodovia Hollow Mill, rumo ao Centro', x: 0.6, y: 84 },
+        { id: 'f-noroeste', nome: 'Rua Kettle, rumo à Colina de Kettle', x: 0.6, y: 30 },
+      ],
+      saidas: [
+        { id: 'leste', nome: 'Saída Leste (Hollow Mill)', x: 127.4, y: 85.6 },
+        { id: 'norte', nome: 'Saída Norte (Estrada da Fundição)', x: 77.6, y: 0.8 },
+      ] },
+    { id: 'vale', num: 4, nome: 'Vale Sul', sub: 'Serraria, estação, Fazenda Harlan e a Mina Velha', lado: 160, metros: 100,
+      rio: { nome: 'Rio Mill', largura: 2.4, pts: [[-2, 0.4], [60, 0.8], [120, 0.2], [162, 0.6]] },
+      ruas: [
+        { id: 'vale', nome: 'Estrada do Vale', classe: 'rodovia', largura: 1.6, pts: [[80, -2], [78, 24], [86, 60], [100, 100], [96, 130], [94, 162]] },
+        { id: 'desvio', nome: 'Estrada do Vale (desvio da estação)', classe: 'rua', largura: 1.1, pts: [[78, 24], [60, 28], [44, 30]] },
+        { id: 'mina', nome: 'Trilha da Mina Velha', classe: 'trilha', largura: 0.7, pts: [[44, 30], [36, 60], [26, 96], [20, 128], [12, 143]] },
+        { id: 'trilhos', nome: 'Ferrovia desativada', classe: 'ferrovia', largura: 0.6, pts: [[34, 31], [28, 60], [22, 100], [18, 130], [14, 146]] },
+      ],
+      pontes: [{ nome: 'Ponte da Rua Principal', x: 80, y: 0.6, ang: 90 }],
+      bairros: [
+        { id: 'vale', nome: 'Vale Sul', x: 0, y: 0, w: 160, h: 160, som: 'mata', mata: true },
+      ],
+      portais: [
+        { id: 'v-norte', nome: 'Estrada do Vale, rumo ao Centro', x: 80, y: 2.2 },
+      ],
+      saidas: [
+        { id: 'sul', nome: 'Saída Sul (Estrada do Vale)', x: 94.2, y: 159.2 },
+      ] },
   ],
-  // as quatro saídas da cidade (podem virar bloqueio policial)
-  saidas: [
-    { id: 'oeste', nome: 'Saída Oeste (Hollow Mill)', x: 0.5, y: 14.5 },
-    { id: 'leste', nome: 'Saída Leste (Hollow Mill)', x: 63.5, y: 23.8 },
-    { id: 'norte', nome: 'Saída Norte (Estrada da Fundição)', x: 55.6, y: 0.6 },
-    { id: 'sul', nome: 'Saída Sul (Estrada do Vale)', x: 27.6, y: 63.4 },
-  ],
-  pontes: [
-    { nome: 'Ponte da Rua Principal', x: 24, y: 46.6, ang: 90 },
-    { nome: 'Ponte da Avenida Cinder', x: 40, y: 48.6, ang: 90 },
-  ],
-  // bairros: rótulo, área (para o som ambiente) e o som de cada um
-  bairros: [
-    { id: 'centro', nome: 'Centro Histórico', x: 18, y: 9, w: 22, h: 27, som: 'centro' },
-    { id: 'kettle', nome: 'Colina de Kettle', x: 0, y: 0, w: 40, h: 8, som: 'vento' },
-    { id: 'fundicao', nome: 'Distrito da Fundição', x: 41, y: 0, w: 23, h: 21, som: 'fabrica' },
-    { id: 'pulptown', nome: 'Pulptown', x: 0, y: 17, w: 23, h: 28, som: 'pulptown' },
-    { id: 'margem', nome: 'Margem do Mill', x: 25, y: 36, w: 39, h: 14, som: 'rio' },
-    { id: 'vale', nome: 'Vale Sul', x: 0, y: 48, w: 64, h: 16, som: 'mata' },
+  // estradas entre as regiões: [portal, portal, km, nome]
+  ligacoes: [
+    ['c-norte', 'k-sul', 0.5, 'Rua Principal e Estrada da Colina'],
+    ['c-leste', 'f-oeste', 0, 'Rodovia Hollow Mill'],
+    ['c-sul', 'v-norte', 0.3, 'Estrada do Vale (Ponte da Rua Principal)'],
+    ['k-leste', 'f-noroeste', 2.5, 'Rua Kettle'],
   ],
 };
 
@@ -66,106 +134,113 @@ const CATEGORIAS = {
   natureza:    { nome: 'Natureza', cor: '#4d6b44', ico: '♣' },
 };
 
-/* Lotes: x, y, w (largura), h (profundidade) em unidades de 25 m; alt = altura do prédio.
+/* Lotes: reg = região; x, y, w (largura), h (profundidade) em quadradinhos da região; alt = altura do prédio.
    conhecido: false = começa coberto pela névoa (o Mestre revela).
    interior: id da planta interna (tocar no prédio abre os andares).
    horario: [abre, fecha] em horas (24 = vira a noite aberto). */
 const LOTES = [
+  // ===== REGIÃO 1 · CENTRO =====
   // ----- Centro Histórico -----
-  { id: 'delegacia', nome: 'Departamento do Xerife (CCSO)', cat: 'civico', x: 25.5, y: 9.5, w: 7, h: 5.5, alt: 2.4, end: 'Rua Principal, 100', interior: 'delegacia', horario: [0, 24],
+  { id: 'delegacia', reg: 'centro', nome: 'Departamento do Xerife (CCSO)', cat: 'civico', x: 25.5, y: 9.5, w: 7, h: 5.5, alt: 2.4, end: 'Rua Principal, 100', interior: 'delegacia', horario: [0, 24],
     pub: 'Sede do Departamento do Xerife do Condado. Prédio de tijolo dos anos 30, bandeira estadual na fachada. Onde o caso 24-1187 foi aberto.' },
-  { id: 'biblioteca', nome: 'Biblioteca e Arquivo Histórico', cat: 'civico', x: 33.5, y: 9.5, w: 5.3, h: 4, alt: 1.8, end: 'Rua Kettle, 12', interior: 'biblioteca', horario: [9, 18],
+  { id: 'biblioteca', reg: 'centro', nome: 'Biblioteca e Arquivo Histórico', cat: 'civico', x: 33.5, y: 9.5, w: 5.3, h: 4, alt: 1.8, end: 'Rua Kettle, 12', interior: 'biblioteca', horario: [9, 18],
     pub: 'Biblioteca pública com o arquivo histórico da cidade: jornais antigos, registros de fundação, mapas e a máquina de microfilme.' },
-  { id: 'sentinel', nome: 'Redação do Crowsrest Sentinel', cat: 'civico', x: 33.5, y: 14.2, w: 5.3, h: 4, alt: 1.6, end: 'Rua Principal, 140', interior: 'sentinel', horario: [7, 22],
+  { id: 'sentinel', reg: 'centro', nome: 'Redação do Crowsrest Sentinel', cat: 'civico', x: 33.5, y: 14.2, w: 5.3, h: 4, alt: 1.6, end: 'Rua Principal, 140', interior: 'sentinel', horario: [7, 22],
     pub: 'Jornal local, "servindo Crowsrest desde 1811". Redação pequena, tipografia nos fundos.' },
-  { id: 'prefeitura', nome: 'Prefeitura e Cartório', cat: 'civico', x: 25.5, y: 15.6, w: 7, h: 3, alt: 1.9, end: 'Rua Principal, 120', horario: [8, 17],
+  { id: 'prefeitura', reg: 'centro', nome: 'Prefeitura e Cartório', cat: 'civico', x: 25.5, y: 15.6, w: 7, h: 3, alt: 1.9, end: 'Rua Principal, 120', horario: [8, 17],
     pub: 'Paço municipal com o cartório de registro civil: certidões de nascimento, casamento e óbito do condado.' },
-  { id: 'igreja', nome: 'Igreja de Santo Aníbal', cat: 'religioso', x: 26, y: 21.8, w: 5, h: 5.6, alt: 3.2, torre: true, end: 'Rua Elm, 2', interior: 'igreja', horario: [6, 20],
+  { id: 'igreja', reg: 'centro', nome: 'Igreja de Santo Aníbal', cat: 'religioso', x: 26, y: 21.8, w: 5, h: 5.6, alt: 3.2, torre: true, end: 'Rua Elm, 2', interior: 'igreja', horario: [6, 20],
     pub: 'Paróquia principal da cidade, estilo gótico modesto. Missa campal anual na praça da fundição.' },
-  { id: 'clube', nome: 'Clube dos Veteranos do Vale', cat: 'social', x: 33, y: 21.8, w: 5.8, h: 5.6, alt: 2.1, end: 'Rua Elm, 30', interior: 'clube', horario: [17, 24],
+  { id: 'clube', reg: 'centro', nome: 'Clube dos Veteranos do Vale', cat: 'social', x: 33, y: 21.8, w: 5.8, h: 5.6, alt: 2.1, end: 'Rua Elm, 30', interior: 'clube', horario: [17, 24],
     pub: 'Sociedade beneficente e recreativa da elite local. Sede em casarão de pedra no centro. Eventos de caridade e jantares fechados.' },
-  { id: 'necroterio', nome: 'Necrotério Municipal', cat: 'saude', x: 25.5, y: 30.3, w: 5.8, h: 4.8, alt: 1.4, end: 'Beco do Necrotério, 1', interior: 'necroterio', horario: [0, 24],
+  { id: 'necroterio', reg: 'centro', nome: 'Necrotério Municipal', cat: 'saude', x: 25.5, y: 30.3, w: 5.8, h: 4.8, alt: 1.4, end: 'Beco do Necrotério, 1', interior: 'necroterio', horario: [0, 24],
     pub: 'Necrotério e serviço de verificação de óbitos da comarca. Anexo ao hospital. Prédio baixo, janelas foscas, sempre frio.' },
-  { id: 'hospital', nome: 'Hospital St. Brigid', cat: 'saude', x: 33, y: 30.3, w: 5.8, h: 4.8, alt: 3, end: 'Rua Elm, 41', interior: 'hospital', horario: [0, 24],
+  { id: 'hospital', reg: 'centro', nome: 'Hospital St. Brigid', cat: 'saude', x: 33, y: 30.3, w: 5.8, h: 4.8, alt: 3, end: 'Rua Elm, 41', interior: 'hospital', horario: [0, 24],
     pub: 'Único hospital de Crowsrest. Fundado pela diocese, hoje municipal. Ala antiga desativada no subsolo.' },
-  { id: 'farmacia', nome: 'Farmácia Hollow', cat: 'comercio', x: 16.2, y: 21.6, w: 6, h: 3, alt: 1.1, end: 'Rodovia Hollow Mill, 210', horario: [8, 21],
+  { id: 'farmacia', reg: 'centro', nome: 'Farmácia Hollow', cat: 'comercio', x: 16.2, y: 21.6, w: 6, h: 3, alt: 1.1, end: 'Rodovia Hollow Mill, 210', horario: [8, 21],
     pub: 'Farmácia com balcão de refrigerantes. O farmacêutico conhece a receita de metade da cidade.' },
-  { id: 'diner', nome: "Rosie's Diner", cat: 'comercio', x: 16.2, y: 25, w: 6, h: 3, alt: 1.1, end: 'Rua Elm, 18', horario: [6, 23],
+  { id: 'diner', reg: 'centro', nome: "Rosie's Diner", cat: 'comercio', x: 16.2, y: 25, w: 6, h: 3, alt: 1.1, end: 'Rua Elm, 18', horario: [6, 23],
     pub: 'Lanchonete de balcão cromado e jukebox. Café ruim, torta boa, fofoca de graça.' },
-  // ----- Colina de Kettle -----
-  { id: 'mansao', nome: 'Mansão Wayne', cat: 'residencial', x: 14, y: 1, w: 7, h: 5, alt: 2.3, end: 'Alameda da Colina, 1', horario: null,
-    pub: 'Residência do Xerife John Wayne e da família, no alto da Colina de Kettle. Muro de pedra e portão de ferro.' },
-  { id: 'torre', nome: "Torre d'Água", cat: 'civico', x: 9.5, y: 9.2, w: 3, h: 3, alt: 4.5, end: 'Rua Kettle, alto', horario: null,
-    pub: 'A torre d\'água da cidade, com o nome CROWSREST pintado em letras desbotadas. Dá para ver o vale inteiro lá de cima.' },
-  { id: 'escola', nome: 'Crowsrest High School', cat: 'civico', x: 27.5, y: 1, w: 8, h: 5.5, alt: 1.8, end: 'Rua Kettle, 40', horario: [7, 17],
+  // ----- Rua Kettle (pé da Colina) -----
+  { id: 'escola', reg: 'centro', nome: 'Crowsrest High School', cat: 'civico', x: 27.5, y: 1, w: 8, h: 5.5, alt: 1.8, end: 'Rua Kettle, 40', horario: [7, 17],
     pub: 'Escola de ensino médio do condado. Time de futebol americano "Os Corvos".' },
-  { id: 'correios', nome: 'Agência dos Correios', cat: 'civico', x: 35.8, y: 1, w: 3, h: 4.5, alt: 1.3, end: 'Rua Kettle, 60', horario: [9, 17],
+  { id: 'correios', reg: 'centro', nome: 'Agência dos Correios', cat: 'civico', x: 35.8, y: 1, w: 3, h: 4.5, alt: 1.3, end: 'Rua Kettle, 60', horario: [9, 17],
     pub: 'Agência dos correios. Caixas postais alugadas no saguão.' },
-  { id: 'radio', nome: 'Rádio WCRS 1420 AM', cat: 'comercio', x: 41.2, y: 1, w: 4, h: 4.6, alt: 1.4, antena: true, end: 'Avenida Cinder, 5', horario: [5, 24],
+  // ----- Avenida Cinder -----
+  { id: 'radio', reg: 'centro', nome: 'Rádio WCRS 1420 AM', cat: 'comercio', x: 41.2, y: 1, w: 4, h: 4.6, alt: 1.4, antena: true, end: 'Avenida Cinder, 5', horario: [5, 24],
     pub: 'A rádio da cidade: música country de dia, programa de pedidos de madrugada e os avisos do condado.' },
-  { id: 'mirante', nome: 'Mirante do Corvo', cat: 'natureza', x: 1.5, y: 1, w: 5, h: 4, alt: 0.3, end: 'Estrada da Colina', horario: null, conhecido: false,
-    pub: 'Um ressalto de pedra acima da cidade, onde os namorados estacionam. Corvos pousam nos fios o ano inteiro.' },
-  // ----- Distrito da Fundição -----
-  { id: 'fundicao', nome: 'Antiga Fundição Crowsrest Iron', cat: 'industrial', x: 57, y: 2.5, w: 6.5, h: 7, alt: 3.6, chamine: true, end: 'Estrada da Fundição, km 2', interior: 'fundicao', horario: null,
-    pub: 'Fundição de ferro desativada, antiga espinha dorsal da economia da cidade. Fumaça ainda sai do subsolo por combustão interna. Área interditada.' },
-  { id: 'praca', nome: 'Praça da Fundição', cat: 'natureza', x: 57.5, y: 11, w: 6, h: 4, alt: 0.1, end: 'Estrada da Fundição', horario: null,
-    pub: 'Praça de terra batida diante da fundição, onde acontecem a missa campal e o desfile cívico anuais.' },
-  { id: 'depositos', nome: 'Depósitos da Saída Norte', cat: 'industrial', x: 51.5, y: 12, w: 4.6, h: 4, alt: 1.6, end: 'Estrada da Fundição, km 1', interior: 'depositos', horario: null,
-    pub: 'Galpões de estocagem perto da saída norte. Vários sem placa ou numeração.' },
-  { id: 'galpoes', nome: 'Galpões sem placa', cat: 'industrial', x: 51.5, y: 16.4, w: 8, h: 3.2, alt: 1.5, end: 'Estrada da Fundição, km 1', horario: null, conhecido: false,
-    pub: 'Fileira de galpões de chapa enferrujada, sem número nem dono aparente.' },
-  { id: 'banco', nome: 'Banco do Vale', cat: 'comercio', x: 41.3, y: 10, w: 3.6, h: 3.6, alt: 1.9, end: 'Avenida Cinder, 40', horario: [9, 16],
+  { id: 'banco', reg: 'centro', nome: 'Banco do Vale', cat: 'comercio', x: 41.3, y: 10, w: 3.6, h: 3.6, alt: 1.9, end: 'Avenida Cinder, 40', horario: [9, 16],
     pub: 'O banco da cidade, com relógio na fachada e cofre do tempo da fundição.' },
-  { id: 'chevette', nome: 'Cena do Chevette (Hollow Mill, km 4)', cat: 'cena', x: 47, y: 22.8, w: 3, h: 1.6, alt: 0.15, end: 'Rodovia Hollow Mill, km 4', horario: null,
-    pub: 'Acostamento da Rodovia Hollow Mill, sentido saída norte. Local onde o veículo com as malas foi encontrado na manhã de 21/05/1997.' },
-  { id: 'bombeiros', nome: 'Corpo de Bombeiros Voluntários', cat: 'civico', x: 41.2, y: 22.8, w: 4.5, h: 4, alt: 1.6, end: 'Avenida Cinder, 88', horario: [0, 24],
+  { id: 'bombeiros', reg: 'centro', nome: 'Corpo de Bombeiros Voluntários', cat: 'civico', x: 41.2, y: 22.8, w: 4.5, h: 4, alt: 1.6, end: 'Avenida Cinder, 88', horario: [0, 24],
     pub: 'Quartel dos bombeiros voluntários. A sirene no telhado toca ao meio-dia, todo dia.' },
   // ----- Pulptown -----
-  { id: 'trailers', nome: 'Parque de Trailers da Rua Pulp', cat: 'residencial', x: 2, y: 30.5, w: 9, h: 6, alt: 0.8, end: 'Rua Pulp, 300', horario: null,
+  { id: 'trailers', reg: 'centro', nome: 'Parque de Trailers da Rua Pulp', cat: 'residencial', x: 2, y: 30.5, w: 9, h: 6, alt: 0.8, end: 'Rua Pulp, 300', horario: null,
     pub: 'Conjunto de trailers no bairro operário de Pulptown. Metade desocupado desde o fechamento da fundição.' },
-  { id: 'mercearia', nome: 'Mercearia Kowalski', cat: 'comercio', x: 12, y: 31, w: 6, h: 4, alt: 1, end: 'Rua Pulp, 210', horario: [7, 21],
+  { id: 'mercearia', reg: 'centro', nome: 'Mercearia Kowalski', cat: 'comercio', x: 12, y: 31, w: 6, h: 4, alt: 1, end: 'Rua Pulp, 210', horario: [7, 21],
     pub: 'Mercearia de bairro com fiado no caderno. Vende de tudo um pouco, inclusive iscas e munição de caça.' },
-  { id: 'penhores', nome: 'Penhores Pulptown', cat: 'comercio', x: 19, y: 31, w: 3.8, h: 4, alt: 1.2, end: 'Rua Pulp, 180', horario: [10, 19],
+  { id: 'penhores', reg: 'centro', nome: 'Penhores Pulptown', cat: 'comercio', x: 19, y: 31, w: 3.8, h: 4, alt: 1.2, end: 'Rua Pulp, 180', horario: [10, 19],
     pub: 'Casa de penhores atulhada: rádios, ferramentas, armas de caça, alianças. Ninguém pergunta de onde veio.' },
-  { id: 'motel', nome: 'Motel Hollow Rest', cat: 'comercio', x: 2, y: 8.5, w: 6, h: 4.5, alt: 1.1, end: 'Rodovia Hollow Mill, km 1', horario: [0, 24],
+  { id: 'motel', reg: 'centro', nome: 'Motel Hollow Rest', cat: 'comercio', x: 2, y: 8.5, w: 6, h: 4.5, alt: 1.1, end: 'Rodovia Hollow Mill, km 1', horario: [0, 24],
     pub: 'Motel de beira de estrada na entrada oeste. Placa de neon com metade das letras apagadas.' },
-  { id: 'cemiterio', nome: 'Cemitério de Crowsrest', cat: 'religioso', x: 6, y: 39.5, w: 12, h: 4, alt: 0.1, cruzes: true, end: 'Rua Pulp, fim', horario: [7, 18],
+  { id: 'cemiterio', reg: 'centro', nome: 'Cemitério de Crowsrest', cat: 'religioso', x: 6, y: 39.5, w: 12, h: 4, alt: 0.1, cruzes: true, end: 'Rua Pulp, fim', horario: [7, 18],
     pub: 'Cemitério municipal na beira do Rio Mill, com a parte antiga tomada pelo mato. Portões de ferro e capela mortuária.' },
   // ----- Margem do Mill -----
-  { id: 'funeraria', nome: 'Funerária Vossler & Filhos', cat: 'comercio', x: 25.5, y: 37.5, w: 6, h: 4, alt: 1.6, end: 'Rua Harrow, 10', interior: 'funeraria', horario: [8, 20],
+  { id: 'funeraria', reg: 'centro', nome: 'Funerária Vossler & Filhos', cat: 'comercio', x: 25.5, y: 37.5, w: 6, h: 4, alt: 1.6, end: 'Rua Harrow, 10', interior: 'funeraria', horario: [8, 20],
     pub: 'Casa funerária tradicional, atende a cidade há quatro gerações. Capela própria e frota de carros fúnebres.' },
-  { id: 'taverna', nome: 'Taverna do Rio', cat: 'comercio', x: 33.5, y: 37.5, w: 5.3, h: 3.6, alt: 1.2, end: 'Rua Harrow, 34', horario: [16, 26],
+  { id: 'taverna', reg: 'centro', nome: 'Taverna do Rio', cat: 'comercio', x: 33.5, y: 37.5, w: 5.3, h: 3.6, alt: 1.2, end: 'Rua Harrow, 34', horario: [16, 26],
     pub: 'Bar de madeira escura onde os operários da fundição bebiam. Hoje bebem os que sobraram.' },
-  { id: 'posto', nome: 'Posto e Lanchonete Mill Stop', cat: 'comercio', x: 42, y: 37.5, w: 5, h: 3.6, alt: 1, end: 'Avenida Cinder, 300', horario: [0, 24],
+  { id: 'posto', reg: 'centro', nome: 'Posto e Lanchonete Mill Stop', cat: 'comercio', x: 42, y: 37.5, w: 5, h: 3.6, alt: 1, end: 'Avenida Cinder, 300', horario: [0, 24],
     pub: 'Posto de gasolina 24h com lanchonete. Ponto de parada de caminhoneiros e o café que fica aberto a noite toda.' },
-  { id: 'patio', nome: 'Pátio Municipal de Veículos', cat: 'civico', x: 42.5, y: 42.5, w: 5.4, h: 3.6, alt: 0.5, end: 'Avenida Cinder, 340', horario: [8, 17], conhecido: false,
+  { id: 'patio', reg: 'centro', nome: 'Pátio Municipal de Veículos', cat: 'civico', x: 42.5, y: 42.5, w: 5.4, h: 3.6, alt: 0.5, end: 'Avenida Cinder, 340', horario: [8, 17], conhecido: false,
     pub: 'Pátio cercado onde ficam os carros apreendidos e abandonados do condado.' },
-  { id: 'ferrovelho', nome: 'Ferro-Velho Dutch', cat: 'industrial', x: 50, y: 38, w: 8, h: 5, alt: 0.8, end: 'Rua Harrow, 90', horario: [8, 18], conhecido: false,
+  { id: 'ferrovelho', reg: 'centro', nome: 'Ferro-Velho Dutch', cat: 'industrial', x: 50, y: 38, w: 8, h: 5, alt: 0.8, end: 'Rua Harrow, 90', horario: [8, 18], conhecido: false,
     pub: 'Montanhas de sucata, carcaças de carro e um cachorro que não late. O dono compra qualquer coisa de metal.' },
-  { id: 'cais', nome: 'Antigo Cais do Mill', cat: 'industrial', x: 47.5, y: 47.2, w: 7, h: 2.3, alt: 0.4, end: 'Rua do Cais', horario: null,
+  { id: 'cais', reg: 'centro', nome: 'Antigo Cais do Mill', cat: 'industrial', x: 47.5, y: 47.2, w: 7, h: 2.3, alt: 0.4, end: 'Rua do Cais', horario: null,
     pub: 'Cais de carga desativado na margem do Rio Mill, usado no auge da madeira e do minério. Estrutura de madeira apodrecida.' },
-  // ----- Vale Sul (outra margem) -----
-  { id: 'estacao', nome: 'Estação Ferroviária (desativada)', cat: 'civico', x: 6, y: 49.5, w: 8, h: 3, alt: 1.3, end: 'Estrada do Vale, desvio', horario: null, conhecido: false,
-    pub: 'Estação de trem fechada desde 1971. Os trilhos somem no mato em direção às minas.' },
-  { id: 'serraria', nome: 'Serraria Mill Lumber', cat: 'industrial', x: 30, y: 52.5, w: 9, h: 5, alt: 1.9, end: 'Estrada do Vale, km 1', horario: [6, 16],
+  // ===== REGIÃO 2 · COLINA DE KETTLE =====
+  { id: 'torre', reg: 'kettle', nome: "Torre d'Água", cat: 'civico', x: 28.5, y: 64.5, w: 2.4, h: 2.4, alt: 4.5, end: 'Rua Kettle, alto', horario: null,
+    pub: 'A torre d\'água da cidade, com o nome CROWSREST pintado em letras desbotadas. Dá para ver o vale inteiro lá de cima.' },
+  { id: 'mansao', reg: 'kettle', nome: 'Mansão Wayne', cat: 'residencial', x: 70.5, y: 19, w: 5.5, h: 4, alt: 2.3, end: 'Alameda da Colina, 1', horario: null,
+    pub: 'Residência do Xerife John Wayne e da família, no alto da Colina de Kettle. Muro de pedra e portão de ferro.' },
+  { id: 'mirante', reg: 'kettle', nome: 'Mirante do Corvo', cat: 'natureza', x: 2.5, y: 1.5, w: 5, h: 3.5, alt: 0.3, end: 'Estrada da Colina, topo', horario: null, conhecido: false,
+    pub: 'Um ressalto de pedra acima da cidade, onde os namorados estacionam. Corvos pousam nos fios o ano inteiro.' },
+  // ===== REGIÃO 3 · DISTRITO DA FUNDIÇÃO =====
+  { id: 'chevette', reg: 'fundicao', nome: 'Cena do Chevette (Hollow Mill, km 4)', cat: 'cena', x: 31, y: 81.4, w: 3, h: 1.5, alt: 0.15, end: 'Rodovia Hollow Mill, km 4', horario: null,
+    pub: 'Acostamento da Rodovia Hollow Mill, sentido saída norte. Local onde o veículo com as malas foi encontrado na manhã de 21/05/1997.' },
+  { id: 'depositos', reg: 'fundicao', nome: 'Depósitos da Saída Norte', cat: 'industrial', x: 51.5, y: 68.4, w: 4.6, h: 3.4, alt: 1.6, end: 'Rodovia Hollow Mill, km 6', interior: 'depositos', horario: null,
+    pub: 'Galpões de estocagem perto da saída norte. Vários sem placa ou numeração.' },
+  { id: 'galpoes', reg: 'fundicao', nome: 'Galpões sem placa', cat: 'industrial', x: 46, y: 64.5, w: 7, h: 2.6, alt: 1.5, end: 'Rodovia Hollow Mill, km 6', horario: null, conhecido: false,
+    pub: 'Fileira de galpões de chapa enferrujada, sem número nem dono aparente.' },
+  { id: 'fundicao', reg: 'fundicao', nome: 'Antiga Fundição Crowsrest Iron', cat: 'industrial', x: 68, y: 40.5, w: 6.5, h: 6, alt: 3.6, chamine: true, end: 'Estrada da Fundição, km 2', interior: 'fundicao', horario: null,
+    pub: 'Fundição de ferro desativada, antiga espinha dorsal da economia da cidade. Fumaça ainda sai do subsolo por combustão interna. Área interditada.' },
+  { id: 'praca', reg: 'fundicao', nome: 'Praça da Fundição', cat: 'natureza', x: 68.5, y: 48, w: 5.5, h: 3.2, alt: 0.1, end: 'Estrada da Fundição, km 2', horario: null,
+    pub: 'Praça de terra batida diante da fundição, onde acontecem a missa campal e o desfile cívico anuais.' },
+  // ===== REGIÃO 4 · VALE SUL =====
+  { id: 'serraria', reg: 'vale', nome: 'Serraria Mill Lumber', cat: 'industrial', x: 81, y: 7, w: 6, h: 3.5, alt: 1.9, end: 'Estrada do Vale, km 1', horario: [6, 16],
     pub: 'A última serraria que ainda funciona. Cheiro de seiva e o grito da serra ouvido de longe.' },
-  { id: 'mina', nome: 'Boca da Mina Velha', cat: 'natureza', x: 2, y: 57.5, w: 6, h: 5, alt: 0.6, end: 'Trilha da Mina Velha', horario: null, conhecido: false,
-    pub: 'Entrada de uma mina de carvão abandonada, tapada com tábuas pregadas e placas de PERIGO.' },
-  { id: 'fazenda', nome: 'Fazenda Harlan', cat: 'residencial', x: 55, y: 56, w: 7, h: 6, alt: 1.2, end: 'Estrada do Vale, km 3', horario: null, conhecido: false,
+  { id: 'estacao', reg: 'vale', nome: 'Estação Ferroviária (desativada)', cat: 'civico', x: 36, y: 26.5, w: 6, h: 2.5, alt: 1.3, end: 'Estrada do Vale, desvio', horario: null, conhecido: false,
+    pub: 'Estação de trem fechada desde 1971. Os trilhos somem no mato em direção às minas.' },
+  { id: 'fazenda', reg: 'vale', nome: 'Fazenda Harlan', cat: 'residencial', x: 103, y: 94, w: 7, h: 6, alt: 1.2, end: 'Estrada do Vale, km 10', horario: null, conhecido: false,
     pub: 'Fazenda de gado leiteiro do outro lado do rio, cercada de pasto e nevoeiro.' },
+  { id: 'mina', reg: 'vale', nome: 'Boca da Mina Velha', cat: 'natureza', x: 7, y: 142, w: 5, h: 4, alt: 0.6, end: 'Trilha da Mina Velha', horario: null, conhecido: false,
+    pub: 'Entrada de uma mina de carvão abandonada, tapada com tábuas pregadas e placas de PERIGO.' },
 ];
 
-/* Residências sem nome: o site gera as casinhas nos bairros (endereço automático).
+/* Residências sem nome: o site gera as casinhas nas regiões (endereço automático).
    Cada zona é um retângulo onde cabem casas de w x h com espaçamento. */
 const ZONAS_RESIDENCIAIS = [
-  { bairro: 'kettle', x: 0.5, y: 13.6, w: 8, h: 3.8, casa: [2.3, 1.8], rua: 'Rua Kettle' },
-  { bairro: 'kettle', x: 44.6, y: 1, w: 8.5, h: 5.5, casa: [2.6, 2.2], rua: 'Alameda da Colina' },
-  { bairro: 'kettle', x: 21.8, y: 1, w: 1, h: 1, casa: [2, 2], rua: 'Alameda da Colina' },
-  { bairro: 'pulptown', x: 1.5, y: 20, w: 12.5, h: 7.4, casa: [2.6, 2.2], rua: 'Rua Elm' },
-  { bairro: 'pulptown', x: 12, y: 35.6, w: 10.6, h: 1.6, casa: [2.4, 1.5], rua: 'Rua Pulp' },
-  { bairro: 'margem', x: 44.5, y: 25.5, w: 13, h: 9.6, casa: [2.6, 2.2], rua: 'Rua Harrow' },
-  { bairro: 'margem', x: 49, y: 30, w: 1, h: 1, casa: [2, 2], rua: 'Rua Harrow' },
-  { bairro: 'vale', x: 40, y: 55, w: 12, h: 6, casa: [2.6, 2.2], rua: 'Estrada do Vale' },
+  { reg: 'centro', bairro: 'kettle', x: 0.5, y: 13.6, w: 8, h: 3.8, casa: [2.3, 1.8], rua: 'Rua Kettle' },
+  { reg: 'centro', bairro: 'cinder', x: 44.6, y: 1, w: 8.5, h: 5.5, casa: [2.6, 2.2], rua: 'Avenida Cinder' },
+  { reg: 'centro', bairro: 'cinder', x: 46, y: 10.5, w: 16, h: 7.5, casa: [2.6, 2.2], rua: 'Avenida Cinder' },
+  { reg: 'centro', bairro: 'pulptown', x: 1.5, y: 20, w: 12.5, h: 7.4, casa: [2.6, 2.2], rua: 'Rua Elm' },
+  { reg: 'centro', bairro: 'pulptown', x: 12, y: 35.6, w: 10.6, h: 1.6, casa: [2.4, 1.5], rua: 'Rua Pulp' },
+  { reg: 'centro', bairro: 'margem', x: 44.5, y: 25.5, w: 13, h: 9.6, casa: [2.6, 2.2], rua: 'Rua Harrow' },
+  { reg: 'centro', bairro: 'vale', x: 40, y: 55, w: 12, h: 6, casa: [2.6, 2.2], rua: 'Estrada do Vale' },
+  { reg: 'kettle', bairro: 'kettle', x: 33, y: 71.5, w: 18, h: 5, casa: [2, 1.6], rua: 'Rua Kettle' },
+  { reg: 'kettle', bairro: 'kettle', x: 58, y: 58.5, w: 14, h: 5, casa: [2, 1.6], rua: 'Rua Kettle' },
+  { reg: 'kettle', bairro: 'kettle', x: 56, y: 45, w: 9, h: 5, casa: [2.2, 1.8], rua: 'Alameda da Colina' },
+  { reg: 'fundicao', bairro: 'hollow', x: 70, y: 77.5, w: 12, h: 4, casa: [1.8, 1.5], rua: 'Rodovia Hollow Mill' },
+  { reg: 'vale', bairro: 'vale', x: 84, y: 12, w: 9, h: 5, casa: [1.6, 1.3], rua: 'Estrada do Vale' },
 ];
 
 /* Plantas internas: andares com salas numa grade de 12 x 10 (unidade = 2 m).
