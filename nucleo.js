@@ -7,7 +7,7 @@
    ========================================================= */
 (() => {
 'use strict';
-const VERSAO = '19970521d';
+const VERSAO = '19970521e';
 const RAIZ = (typeof CRW_RAIZ === 'string' ? CRW_RAIZ : 'crowsrest').replace(/^\/+|\/+$/g, '');
 const TV = new URLSearchParams(location.search).has('tv');
 

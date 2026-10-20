@@ -98,3 +98,30 @@ body.tv .mp-vista{border:0}
 .mp-barra.rola-esq{-webkit-mask-image:linear-gradient(to right,transparent,#000 30px);mask-image:linear-gradient(to right,transparent,#000 30px)}
 .mp-barra.rola-esq.rola-dir{-webkit-mask-image:linear-gradient(to right,transparent,#000 30px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,transparent,#000 30px,#000 calc(100% - 36px),transparent)}
 .mp-tv .mp-status{top:10px;bottom:auto}
+/* regiões (como os andares da Planta) */
+.mp-regioes{flex:none;display:flex;gap:4px;align-items:stretch;padding:4px;overflow-x:auto;scrollbar-width:thin;background:var(--w-face);border-bottom:1px solid var(--w-shadow)}
+.mp-interior .mp-regioes{display:none}
+.mp-reg{display:flex;align-items:center;gap:6px;min-width:0;padding:3px 10px 3px 4px;white-space:nowrap;position:relative}
+.mp-reg-n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#000080;color:#fff;font:bold 12px Tahoma,sans-serif;flex:none}
+.mp-reg.on .mp-reg-n{background:#ffe36b;color:#000;box-shadow:0 0 0 2px #000}
+.mp-reg.minha .mp-reg-n{outline:2px dashed #c0392b;outline-offset:1px}
+.mp-reg-t{font-size:12px}
+.mp-reg-c{position:absolute;top:1px;right:1px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:#c0392b;color:#fff;font:bold 10px/15px Tahoma,sans-serif;font-style:normal;text-align:center}
+.mp-reg-cond{padding-left:8px}
+.mp-esc{opacity:.85}
+.mp-lista-curta{max-height:none}
+.mp-cd{width:100%;height:auto;display:block;background:#f4f3ec;border:2px inset #fff;margin-bottom:6px}
+.mp-cd text{font-family:Tahoma,Verdana,sans-serif}
+@media (pointer:coarse){ .mp-reg{min-height:40px} }
+@media (max-width:520px){
+  .mp-reg{padding:3px 8px 3px 3px}
+  .mp-reg-t{font-size:11px;max-width:78px;overflow:hidden;text-overflow:ellipsis}
+  .mp-reg.on .mp-reg-t{max-width:none}
+}
+.mp-reg{padding-right:18px}
+.mp-reg-cond{padding-right:10px}
+.mp-nw{white-space:nowrap}
+.mp-cd-leg{margin:0 0 8px 20px;font-size:12px;display:grid;gap:2px}
+.mp-reg{padding-right:10px}
+.mp-reg-c{right:auto;left:18px;top:0}
+.mp-reg{flex:none}
