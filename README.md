@@ -145,3 +145,7 @@ A "chave" é um código de 32 letras guardado no aparelho do jogador. Em outro a
 - **Atestados do Arquivo do Condado:** os nomes das vítimas não existem na campanha; estão sob tarja como "(preencher)". Preencha antes de revelar.
 - **Rotinas dos NPCs** nas sementes são sugestões de horário (desligadas); ajuste à sua mesa.
 - **Histórico do Git.** O site antigo tinha a senha "corvo" e o resultado do DNA no código. Mesmo substituído, isso continua no histórico do repositório.
+
+---
+
+Desenvolvido por Rodrigo Terroso Junior. O Claude, da Anthropic, foi usado como ferramenta durante o desenvolvimento.
