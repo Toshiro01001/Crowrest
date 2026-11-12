@@ -7,7 +7,7 @@
    ========================================================= */
 (() => {
 'use strict';
-const VERSAO = '19970521e';
+const VERSAO = '19970521f';
 const RAIZ = (typeof CRW_RAIZ === 'string' ? CRW_RAIZ : 'crowsrest').replace(/^\/+|\/+$/g, '');
 const TV = new URLSearchParams(location.search).has('tv');
 
@@ -300,12 +300,15 @@ function janela(op) {
   fundo.dataset.jan = id;
   const w = el('div', 'win jan ' + (op.classe || ''));
   if (op.largura) w.style.width = op.largura;
-  w.innerHTML = `<div class="titlebar"><span class="tb-title">${op.icone ? `<span class="tb-ico">${op.icone}</span>` : '<svg class="tb-seal"><use href="#seal"></use></svg>'} ${esc(op.titulo || '')}</span><span class="tb-btns"><b class="tbx x" data-fechar aria-label="Fechar" role="button">✕</b></span></div><div class="jan-corpo"></div>`;
+  w.innerHTML = `<div class="titlebar"><span class="tb-title">${op.icone ? `<span class="tb-ico">${op.icone}</span>` : '<svg class="tb-seal"><use href="#seal"></use></svg>'} ${esc(op.titulo || '')}</span><span class="tb-btns"><b class="tbx x" data-fechar aria-label="Fechar" role="button" tabindex="0">✕</b></span></div><div class="jan-corpo"></div>`;
   const corpo = $('.jan-corpo', w);
   if (typeof op.html === 'string') corpo.innerHTML = op.html; else if (op.html) corpo.appendChild(op.html);
   fundo.appendChild(w);
   fundo.addEventListener('click', e => {
     if (e.target.closest('[data-fechar]') || (e.target === fundo && op.fecharFora !== false)) fecharJanela(id);
+  });
+  fundo.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-fechar]')) { e.preventDefault(); fecharJanela(id); }
   });
   fundo._aoFechar = op.aoFechar;
   $('#janelas').appendChild(fundo);
@@ -818,6 +821,7 @@ async function iniciarInterno() {
   $('#btnSom').addEventListener('click', () => { const l = Som.alternar(); $('#btnSom').textContent = l ? '🔊' : '🔇'; });
   $('#btnSom').textContent = Som.ligado ? '🔊' : '🔇';
   $('#btnSair').addEventListener('click', sair);
+  $('#btnSair').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sair(); } });
   $('#btnCasoHdr').addEventListener('click', () => { document.body.classList.toggle('casohdr-aberto'); });
   // boot com discagem real: enquanto o modem toca, o site conecta de verdade
   const log = $('#bootLog');

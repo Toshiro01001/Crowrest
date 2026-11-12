@@ -34,7 +34,7 @@ O manual completo está dentro do próprio site, em **Como Usar** (cada papel v�
 | `style.css` | Tema Windows 95 e componentes comuns |
 | `img/` | As cinco fotos do caso |
 
-A versão aparece no rodapé (`SIIC v4.0 · 19970521e`).
+A versão aparece no rodapé (`SIIC v4.0 · 19970521f`).
 
 ## 3. Publicar e configurar
 
