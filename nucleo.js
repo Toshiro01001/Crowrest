@@ -7,7 +7,7 @@
    ========================================================= */
 (() => {
 'use strict';
-const VERSAO = '19970521f';
+const VERSAO = '19970521g';
 const RAIZ = (typeof CRW_RAIZ === 'string' ? CRW_RAIZ : 'crowsrest').replace(/^\/+|\/+$/g, '');
 const TV = new URLSearchParams(location.search).has('tv');
 
@@ -734,7 +734,7 @@ function desenharLogin() {
   const lista = pcs();
   let modo = ss.get('loginModo', 'jog'); if (modo === 'aux' && !AUX_LIGADOS) modo = 'jog';
   corpo.innerHTML = `
-    <div class="lf-row"><label>Perfil:</label><select id="lgPerfil" class="w95-input">
+    <div class="lf-row"><label for="lgPerfil">Perfil:</label><select id="lgPerfil" class="w95-input">
       <option value="jog"${modo === 'jog' ? ' selected' : ''}>Investigador (jogador)</option>
       ${AUX_LIGADOS ? `<option value="aux"${modo === 'aux' ? ' selected' : ''}>Mestre Auxiliar</option>` : ''}
       <option value="mestre"${modo === 'mestre' ? ' selected' : ''}>Guardião da Luz (Mestre)</option></select></div>
@@ -747,10 +747,10 @@ function desenharLogin() {
     const m = $('#lgPerfil').value; ss.set('loginModo', m);
     const c = $('#lgCampos');
     if (m === 'jog') c.innerHTML = lista.length
-      ? `<div class="lf-row"><label>Usuário:</label><select id="lgPc" class="w95-input">${lista.map(x => `<option value="${esc(x.id)}">${esc(x.nome)}${x.jogador ? ' · ' + esc(x.jogador) : ''}</option>`).join('')}</select></div><div class="lf-row"><label>Caso:</label><input class="w95-input" value="${typeof CASO !== 'undefined' ? CASO.numero : ''}" readonly></div>`
+      ? `<div class="lf-row"><label for="lgPc">Usuário:</label><select id="lgPc" class="w95-input">${lista.map(x => `<option value="${esc(x.id)}">${esc(x.nome)}${x.jogador ? ' · ' + esc(x.jogador) : ''}</option>`).join('')}</select></div><div class="lf-row"><label for="lgCaso">Caso:</label><input id="lgCaso" class="w95-input" value="${typeof CASO !== 'undefined' ? CASO.numero : ''}" readonly></div>`
       : '<p class="lg-mini">Nenhum investigador cadastrado ainda. O Guardião da Luz cadastra os personagens no painel dele (aba Mapa, "Personagens").</p>';
-    else if (m === 'aux') c.innerHTML = `<div class="lf-row"><label>Nome:</label><input id="lgNomeAux" class="w95-input" value="${esc(ls.get('nomeAux', ''))}" placeholder="seu nome"></div><div class="lf-row"><label>Senha:</label><input id="lgSenha" type="password" class="w95-input" autocomplete="off"></div>`;
-    else c.innerHTML = `${Rede.fb() ? `<div class="lf-row"><label>E-mail:</label><input id="lgEmail" class="w95-input" type="email" value="${esc(ls.get('emailMestre', ''))}" autocomplete="username"></div>` : ''}<div class="lf-row"><label>Senha:</label><input id="lgSenha" type="password" class="w95-input" autocomplete="current-password"></div>`;
+    else if (m === 'aux') c.innerHTML = `<div class="lf-row"><label for="lgNomeAux">Nome:</label><input id="lgNomeAux" class="w95-input" value="${esc(ls.get('nomeAux', ''))}" placeholder="seu nome"></div><div class="lf-row"><label for="lgSenha">Senha:</label><input id="lgSenha" type="password" class="w95-input" autocomplete="off"></div>`;
+    else c.innerHTML = `${Rede.fb() ? `<div class="lf-row"><label for="lgEmail">E-mail:</label><input id="lgEmail" class="w95-input" type="email" value="${esc(ls.get('emailMestre', ''))}" autocomplete="username"></div>` : ''}<div class="lf-row"><label for="lgSenha">Senha:</label><input id="lgSenha" type="password" class="w95-input" autocomplete="current-password"></div>`;
   };
   $('#lgPerfil').addEventListener('change', campos); campos();
   corpo.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) $('#loginBtn').click(); });
